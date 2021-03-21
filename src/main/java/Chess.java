@@ -8,7 +8,7 @@ public class Chess extends Application {
 
     @Override
     public void start(Stage stage) {
-        Label l = new Label("ChessApplication");
+        Label l = new Label("ChessApplication by James and Royston");
         Scene scene = new Scene(new StackPane(l), 600, 600);
         stage.setScene(scene);
         stage.show();
