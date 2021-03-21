@@ -41,18 +41,18 @@ public class Chessboard {
                 colour++;
             }
         }
-        setPieces(grid);
         this.board = grid;
+        setPieces();
     }
 
-    public void setPieces(GridPane grid) {
+    public void setPieces() {
         ChessPiece king = new ChessPiece(PieceEnum.KING, ColourEnum.BLACK,3,4, pxSquareEdge);
         ChessPiece queen = new ChessPiece(PieceEnum.QUEEN, ColourEnum.WHITE,6,4, pxSquareEdge);
         pieces.add(king);
         pieces.add(queen);
         // Adds to board
         for(ChessPiece piece: pieces) {
-            grid.getChildren().add(piece);
+            board.getChildren().add(piece);
             piece.setOnMousePressed((MouseEvent event) -> {
                 board.setOnMouseDragged((MouseEvent e) -> {
                     GridPane.setRowIndex(piece, (int) e.getY()/75);
