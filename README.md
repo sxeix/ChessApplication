@@ -8,3 +8,5 @@ Once JavaFx is installed you may want to use [this](https://stackoverflow.com/qu
 Project uses [Lombok](https://projectlombok.org/)
 
 Try to keep to using [Hamcrest](http://hamcrest.org/JavaHamcrest/tutorial) for consistency in testing
+
+Use [Trello](https://trello.com/b/c5ULggm0/chessapp) board
