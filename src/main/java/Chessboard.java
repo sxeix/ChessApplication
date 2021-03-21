@@ -1,15 +1,11 @@
 import enums.ColourEnum;
 import enums.PieceEnum;
-import javafx.scene.Cursor;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @RequiredArgsConstructor
 public class Chessboard {
@@ -52,21 +48,5 @@ public class Chessboard {
         // Adds to board
         grid.getChildren().add(king);
         grid.getChildren().add(queen);
-    }
-
-    public class Piece extends ImageView {
-        @Getter
-        @Setter
-        private Integer xCoord;
-        @Getter
-        @Setter
-        private Integer yCoord;
-
-        public Piece(Image img, Integer xco, Integer yco) {
-            super(img);
-            this.xCoord = xco;
-            this.yCoord = yco;
-        }
-
     }
 }

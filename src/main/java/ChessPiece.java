@@ -23,6 +23,7 @@ public class ChessPiece extends ImageView {
     @Setter
     private PieceEnum type;
 
+    @Getter
     private ColourEnum colour;
 
     public ChessPiece(PieceEnum t, ColourEnum c, Integer x, Integer y, Integer px) {
