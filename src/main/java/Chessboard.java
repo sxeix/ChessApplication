@@ -1,3 +1,6 @@
+import javafx.scene.Cursor;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +20,8 @@ public class Chessboard {
     @Getter
     private GridPane board;
 
+    double orgSceneX, orgSceneY;
+
     public void initBoard() {
         GridPane grid = new GridPane();
         this.pxSquareEdge = this.pxSideLength / 8;
@@ -34,6 +39,26 @@ public class Chessboard {
                 colour++;
             }
         }
+        setPieces(grid);
         this.board = grid;
+    }
+
+    public void setPieces(GridPane grid) {
+        ClassLoader loader = Chessboard.class.getClassLoader();
+        Image image = new Image("Images/king_white.png");
+        ImageView imView = new ImageView(image);
+        imView.setSmooth(true);
+        imView.setFitHeight(pxSquareEdge);
+        imView.setFitWidth(pxSquareEdge);
+
+        imView.setCursor(Cursor.HAND);
+
+//        imView.setOnMousePressed((t) -> {
+//            orgSceneX = t.getSceneX();
+//            orgSceneY = t.getSceneY();
+//        });
+        GridPane.setRowIndex(imView, 0);
+        GridPane.setColumnIndex(imView, 1);
+        grid.getChildren().add(imView);
     }
 }
