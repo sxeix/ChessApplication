@@ -1,3 +1,5 @@
+import enums.ColourEnum;
+import enums.PieceEnum;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -7,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @RequiredArgsConstructor
 public class Chessboard {
@@ -44,21 +47,26 @@ public class Chessboard {
     }
 
     public void setPieces(GridPane grid) {
-        ClassLoader loader = Chessboard.class.getClassLoader();
-        Image image = new Image("Images/king_white.png");
-        ImageView imView = new ImageView(image);
-        imView.setSmooth(true);
-        imView.setFitHeight(pxSquareEdge);
-        imView.setFitWidth(pxSquareEdge);
+        ChessPiece king = new ChessPiece(PieceEnum.KING, ColourEnum.BLACK,3,4, pxSquareEdge);
+        ChessPiece queen = new ChessPiece(PieceEnum.QUEEN, ColourEnum.WHITE,6,4, pxSquareEdge);
+        // Adds to board
+        grid.getChildren().add(king);
+        grid.getChildren().add(queen);
+    }
 
-        imView.setCursor(Cursor.HAND);
+    public class Piece extends ImageView {
+        @Getter
+        @Setter
+        private Integer xCoord;
+        @Getter
+        @Setter
+        private Integer yCoord;
 
-//        imView.setOnMousePressed((t) -> {
-//            orgSceneX = t.getSceneX();
-//            orgSceneY = t.getSceneY();
-//        });
-        GridPane.setRowIndex(imView, 0);
-        GridPane.setColumnIndex(imView, 1);
-        grid.getChildren().add(imView);
+        public Piece(Image img, Integer xco, Integer yco) {
+            super(img);
+            this.xCoord = xco;
+            this.yCoord = yco;
+        }
+
     }
 }
