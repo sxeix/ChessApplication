@@ -43,7 +43,6 @@ public class ChessPiece extends ImageView {
     }
 
     public Image getPieceImage() {
-        ClassLoader loader = Chessboard.class.getClassLoader();
         return new Image("Images/" + getPieceString() + "_" + getColourString() + ".png");
     }
 
