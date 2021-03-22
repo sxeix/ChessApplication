@@ -95,11 +95,12 @@ public class Chessboard {
                     piece.setXCoord((int) e.getX()/pxSquareEdge); piece.setYCoord((int) e.getY()/pxSquareEdge);
                 });
                 piece.setOnMouseReleased((MouseEvent e) -> {
-                    //just a tiny thing I added to take another piece. probably a better way to do it? idk
-                    for(ChessPiece p: pieces)
-                        if (p.getXCoord().equals(piece.getXCoord()) && p.getYCoord().equals(piece.getYCoord()) && p != piece)
-                            board.getChildren().remove(p);
-
+                    board.getChildren()
+                            .stream()
+                            .filter(x -> x instanceof ChessPiece)
+                            .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
+                            .findFirst()
+                            .ifPresent(pieceBelow -> board.getChildren().remove(pieceBelow));
                     overlay.getChildren().remove(pane);
                     GridPane.setRowIndex(piece, piece.getYCoord());
                     GridPane.setColumnIndex(piece, piece.getXCoord());
