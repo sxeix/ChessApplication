@@ -38,8 +38,8 @@ public class ChessPiece extends ImageView {
         this.setFitHeight(px);
         this.setFitWidth(px);
         this.setCursor(Cursor.HAND);
-        GridPane.setRowIndex(this, this.getXCoord());
-        GridPane.setColumnIndex(this, this.getYCoord());
+        GridPane.setRowIndex(this, this.getYCoord());
+        GridPane.setColumnIndex(this, this.getXCoord());
     }
 
     public Image getPieceImage() {
