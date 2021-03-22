@@ -1,7 +1,5 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Chess extends Application {
@@ -10,7 +8,7 @@ public class Chess extends Application {
     public void start(Stage stage) {
         Chessboard chessboard = new Chessboard(600);
         chessboard.initBoard();
-        Scene scene = new Scene(chessboard.getBoard(), 600, 600);
+        Scene scene = new Scene(chessboard.getOverlay(), 600, 600);
         stage.setScene(scene);
         stage.show();
     }
