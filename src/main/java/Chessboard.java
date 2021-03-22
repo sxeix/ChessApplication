@@ -53,22 +53,37 @@ public class Chessboard {
         this.board = grid;
         this.overlay.getChildren().addAll(this.board);
         setPieces();
+        movementControl();
     }
 
     public void setPieces() {
-        ChessPiece king = new ChessPiece(PieceEnum.KING, ColourEnum.BLACK,4,0, pxSquareEdge);
-        ChessPiece queen = new ChessPiece(PieceEnum.QUEEN, ColourEnum.WHITE,3,7, pxSquareEdge);
-        ChessPiece bishop = new ChessPiece(PieceEnum.BISHOP, ColourEnum.BLACK,2,0, pxSquareEdge);
-        ChessPiece knight = new ChessPiece(PieceEnum.KNIGHT, ColourEnum.WHITE,6,7, pxSquareEdge);
-        pieces.add(king);
-        pieces.add(queen);
-        pieces.add(bishop);
-        pieces.add(knight);
+        final var colours = new ColourEnum[]{ColourEnum.BLACK, ColourEnum.WHITE};
+        for(ColourEnum colour: colours) {
+            addPiece(PieceEnum.KING, colour,4,colour == ColourEnum.BLACK ? 0 : 7);
+            addPiece(PieceEnum.QUEEN, colour,3,colour == ColourEnum.BLACK ? 0 : 7);
+            for(int i = 0; i < 8; i++) {
+                addPiece(PieceEnum.PAWN, colour,i,colour == ColourEnum.BLACK ? 1 : 6);
+            }
+            for(int i = 0; i < 2; i++) {
+                addPiece(PieceEnum.BISHOP, colour, i % 2 == 0 ? 2 : 5,colour == ColourEnum.BLACK ? 0 : 7);
+            }
+            for(int i = 0; i < 2; i++) {
+                addPiece(PieceEnum.KNIGHT, colour, i % 2 == 0 ? 1 : 6,colour == ColourEnum.BLACK ? 0 : 7);
+            }
+            for(int i = 0; i < 2; i++) {
+                addPiece(PieceEnum.ROOK, colour, i % 2 == 0 ? 0 : 7,colour == ColourEnum.BLACK ? 0 : 7);
+            }
+        }
+    }
 
-        // Adds to board
+    public void addPiece(PieceEnum type, ColourEnum colour, int x, int y) {
+        ChessPiece piece = new ChessPiece(type, colour,x,y, pxSquareEdge);
+        pieces.add(piece);
+        board.getChildren().add(piece);
+    }
+
+    private void movementControl() {
         for(ChessPiece piece: pieces) {
-            board.getChildren().add(piece);
-
             // Smooth Movement
             piece.setOnMousePressed((MouseEvent event) -> {
                 board.getChildren().remove(piece);
@@ -80,11 +95,12 @@ public class Chessboard {
                     piece.setXCoord((int) e.getX()/pxSquareEdge); piece.setYCoord((int) e.getY()/pxSquareEdge);
                 });
                 piece.setOnMouseReleased((MouseEvent e) -> {
-                    //just a tiny thing I added to take another piece. probably a better way to do it? idk
-                    for(ChessPiece p: pieces)
-                        if (p.getXCoord().equals(piece.getXCoord()) && p.getYCoord().equals(piece.getYCoord()) && p != piece)
-                            board.getChildren().remove(p);
-
+                    board.getChildren()
+                            .stream()
+                            .filter(x -> x instanceof ChessPiece)
+                            .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
+                            .findFirst()
+                            .ifPresent(pieceBelow -> board.getChildren().remove(pieceBelow));
                     overlay.getChildren().remove(pane);
                     GridPane.setRowIndex(piece, piece.getYCoord());
                     GridPane.setColumnIndex(piece, piece.getXCoord());
