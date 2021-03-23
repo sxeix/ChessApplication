@@ -33,5 +33,4 @@ public class MoveValidator {
         coords.add(new Point(3, 5));
         return coords;
     }
-
 }
