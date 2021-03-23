@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class MoveValidator {
 
     //being lazy and cba to fill out the rest of these lol. you can see what I've tried to do though
-    public ArrayList<Point> getValidMoves(ChessPiece p, ArrayList<ChessPiece> pieces){
+    public void calculateLegalMoves(ChessPiece p, ArrayList<ChessPiece> pieces){
         switch(p.getType()){
             case ROOK:
-                return legalRookMoves(p, pieces);
+                p.setPotentialMoves(legalRookMoves(p, pieces));
             case BISHOP:
-                return legalBishopMoves(p, pieces);
+                p.setPotentialMoves(legalBishopMoves(p, pieces));
             default:
-                return legalRookMoves(p, pieces);
+                p.setPotentialMoves(legalRookMoves(p, pieces));
         }
     }
 
