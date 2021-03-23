@@ -12,8 +12,10 @@ public class MoveValidator {
         switch(p.getType()){
             case ROOK:
                 p.setPotentialMoves(legalRookMoves(p, pieces));
+                break;
             case BISHOP:
                 p.setPotentialMoves(legalBishopMoves(p, pieces));
+                break;
             default:
                 p.setPotentialMoves(legalRookMoves(p, pieces));
         }
