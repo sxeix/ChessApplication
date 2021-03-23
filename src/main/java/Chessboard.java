@@ -38,6 +38,8 @@ public class Chessboard {
 
     private Rectangle highlighted;
 
+    private ColourEnum turnColour = ColourEnum.WHITE;
+
     public void initBoard() {
         GridPane grid = new GridPane();
         overlay = new StackPane();
@@ -100,6 +102,7 @@ public class Chessboard {
         for(ChessPiece piece: pieces) {
             // Smooth Movement
             piece.setOnMousePressed((MouseEvent event) -> {
+                if(!validateColour(piece)) return;
                 validator.calculateLegalMoves(piece, this.pieces);
                 GridPane.setRowIndex(highlighted, (int)event.getSceneY()/this.pxSquareEdge);
                 GridPane.setColumnIndex(highlighted, (int)event.getSceneX()/this.pxSquareEdge);
@@ -115,6 +118,7 @@ public class Chessboard {
                 });
 
                 piece.setOnMouseReleased((MouseEvent e) -> {
+                    if(!validateColour(piece)) return;
                     pane.getChildren().clear(); pane.setVisible(false);
                     highlighted.setVisible(false);
                     dropPiece(piece, e); // AND THIS
@@ -138,6 +142,7 @@ public class Chessboard {
         for(Point coords: piece.getPotentialMoves()){
             if(coords.getX() == (int)e.getSceneX()/this.pxSquareEdge && coords.getY() == (int)e.getSceneY()/this.pxSquareEdge){
                 piece.setXCoord((int)coords.getX()); piece.setYCoord((int)coords.getY());
+                turnColour = turnColour.equals(ColourEnum.WHITE) ? ColourEnum.BLACK : ColourEnum.WHITE;
                 board.getChildren()
                         .stream()
                         .filter(x -> x instanceof ChessPiece)
@@ -148,4 +153,9 @@ public class Chessboard {
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
     }
+
+    public boolean validateColour(ChessPiece piece){
+        return piece.getColour().equals(turnColour);
+    }
+
 }
