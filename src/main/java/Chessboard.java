@@ -38,8 +38,6 @@ public class Chessboard {
 
     private Rectangle highlighted;
 
-    private ArrayList<Point> legalMoves = new ArrayList<>();
-
     public void initBoard() {
         GridPane grid = new GridPane();
         overlay = new StackPane();
@@ -102,11 +100,11 @@ public class Chessboard {
         for(ChessPiece piece: pieces) {
             // Smooth Movement
             piece.setOnMousePressed((MouseEvent event) -> {
-                legalMoves = validator.getValidMoves(piece, this.pieces);
+                validator.calculateLegalMoves(piece, this.pieces);
                 GridPane.setRowIndex(highlighted, (int)event.getSceneY()/this.pxSquareEdge);
                 GridPane.setColumnIndex(highlighted, (int)event.getSceneX()/this.pxSquareEdge);
                 board.getChildren().remove(piece);
-                drawLegalMoves(); // JUST ADDED THIS
+                drawLegalMoves(piece); // JUST ADDED THIS
                 pane.getChildren().add(piece); pane.setVisible(true);
                 highlighted.setVisible(true);
 
@@ -127,8 +125,8 @@ public class Chessboard {
         }
     }
 
-    public void drawLegalMoves(){
-        for(Point coords: legalMoves){
+    public void drawLegalMoves(ChessPiece piece){
+        for(Point coords: piece.getPotentialMoves()){
             Circle high = new Circle(this.pxSquareEdge/6);
             high.setFill(Color.GREY);
             high.relocate((int)coords.getX() * this.pxSquareEdge + this.pxSquareEdge/3, (int)coords.getY() * this.pxSquareEdge + this.pxSquareEdge/3);
@@ -137,7 +135,7 @@ public class Chessboard {
     }
 
     public void dropPiece(ChessPiece piece, MouseEvent e){
-        for(Point coords: legalMoves){
+        for(Point coords: piece.getPotentialMoves()){
             if(coords.getX() == (int)e.getSceneX()/this.pxSquareEdge && coords.getY() == (int)e.getSceneY()/this.pxSquareEdge){
                 piece.setXCoord((int)coords.getX()); piece.setYCoord((int)coords.getY());
                 board.getChildren()
