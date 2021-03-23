@@ -9,15 +9,10 @@ public class MoveValidator {
 
     //being lazy and cba to fill out the rest of these lol. you can see what I've tried to do though
     public void calculateLegalMoves(ChessPiece p, ArrayList<ChessPiece> pieces){
-        switch(p.getType()){
-            case ROOK:
-                p.setPotentialMoves(legalRookMoves(p, pieces));
-                break;
-            case BISHOP:
-                p.setPotentialMoves(legalBishopMoves(p, pieces));
-                break;
-            default:
-                p.setPotentialMoves(legalRookMoves(p, pieces));
+        switch (p.getType()) {
+            case ROOK -> p.setPotentialMoves(legalRookMoves(p, pieces));
+            case BISHOP -> p.setPotentialMoves(legalBishopMoves(p, pieces));
+            default -> p.setPotentialMoves(legalRookMoves(p, pieces));
         }
     }
 
