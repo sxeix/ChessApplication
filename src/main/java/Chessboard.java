@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class Chessboard {
 
     private Rectangle highlighted;
 
-    private ArrayList<Pair> legalMoves = new ArrayList<>();
+    private ArrayList<Point> legalMoves = new ArrayList<>();
 
     public void initBoard() {
         GridPane grid = new GridPane();
@@ -52,7 +53,6 @@ public class Chessboard {
                 rec.setWidth(this.pxSquareEdge);
                 rec.setHeight(this.pxSquareEdge);
                 rec.setFill(colour % 2 == 0 ? Color.DARKSLATEGRAY: Color.WHITESMOKE);
-                rec.setX(y); rec.setY(x);
                 GridPane.setRowIndex(rec, x);
                 GridPane.setColumnIndex(rec, y);
                 grid.getChildren().addAll(rec);
@@ -69,7 +69,6 @@ public class Chessboard {
         grid.getChildren().add(highlighted);
         setPieces();
         movementControl();
-
     }
 
     public void setPieces() {
@@ -102,20 +101,13 @@ public class Chessboard {
         for(ChessPiece piece: pieces) {
             // Smooth Movement
             piece.setOnMousePressed((MouseEvent event) -> {
-                // This is where shit gets handed over to the MoveValidator class
-                legalMoves = validator.initiateValidate(piece, this.pieces);
-
+                legalMoves = validator.getValidMoves(piece, this.pieces);
                 GridPane.setRowIndex(highlighted, (int)event.getSceneY()/this.pxSquareEdge);
                 GridPane.setColumnIndex(highlighted, (int)event.getSceneX()/this.pxSquareEdge);
                 board.getChildren().remove(piece);
                 overlay.getChildren().add(pane);
                 highlighted.setVisible(true);
-                for(Pair coords: legalMoves){
-                    Circle high = new Circle(this.pxSquareEdge/6);
-                    high.setFill(Color.GREY);
-                    high.relocate((int)coords.getKey() * this.pxSquareEdge + this.pxSquareEdge/3, (int)coords.getValue() * this.pxSquareEdge + this.pxSquareEdge/3);
-                    pane.getChildren().add(high);
-                }
+                drawLegalMoves(); // JUST ADDED THIS
                 pane.getChildren().add(piece);
 
                 pane.setOnMouseDragged((MouseEvent e) -> {
@@ -127,25 +119,36 @@ public class Chessboard {
                 piece.setOnMouseReleased((MouseEvent e) -> {
                     pane.getChildren().clear();
                     highlighted.setVisible(false);
-                    for(Pair coords: legalMoves){
-                        if(coords.getKey().equals((int)e.getSceneX()/this.pxSquareEdge) && coords.getValue().equals((int)e.getSceneY()/this.pxSquareEdge)){
-                            piece.setXCoord((int) coords.getKey()); piece.setYCoord((int) coords.getValue());
-
-                            board.getChildren()
-                                    .stream()
-                                    .filter(x -> x instanceof ChessPiece)
-                                    .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
-                                    .findFirst()
-                                    .ifPresent(pieceBelow -> board.getChildren().remove(pieceBelow));
-                        }
-                    }
+                    dropPiece(piece, e); // AND THIS
                     overlay.getChildren().remove(pane);
-                    GridPane.setRowIndex(piece, piece.getYCoord());
-                    GridPane.setColumnIndex(piece, piece.getXCoord());
                     board.getChildren().add(piece);
                     board.setOnMouseDragged(null);
                 });
             });
         }
+    }
+
+    public void drawLegalMoves(){
+        for(Point coords: legalMoves){
+            Circle high = new Circle(this.pxSquareEdge/6);
+            high.setFill(Color.GREY);
+            high.relocate((int)coords.getX() * this.pxSquareEdge + this.pxSquareEdge/3, (int)coords.getY() * this.pxSquareEdge + this.pxSquareEdge/3);
+            pane.getChildren().add(high);
+        }
+    }
+
+    public void dropPiece(ChessPiece piece, MouseEvent e){
+        for(Point coords: legalMoves){
+            if(coords.getX() == (int)e.getSceneX()/this.pxSquareEdge && coords.getY() == (int)e.getSceneY()/this.pxSquareEdge){
+                piece.setXCoord((int)coords.getX()); piece.setYCoord((int)coords.getY());
+                board.getChildren()
+                        .stream()
+                        .filter(x -> x instanceof ChessPiece)
+                        .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
+                        .findFirst()
+                        .ifPresent(pieceBelow -> board.getChildren().remove(pieceBelow));
+            }
+        }
+        GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
     }
 }
