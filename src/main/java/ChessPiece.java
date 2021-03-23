@@ -7,6 +7,9 @@ import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 /*
 * This class is an extension of the ImageView class which is stored in a space on the grid.
 * the reason for this class is to attach the coordinates to the image and format the image as desired.
@@ -25,6 +28,11 @@ public class ChessPiece extends ImageView {
 
     @Getter
     private final ColourEnum colour;
+
+    @Getter
+    @Setter
+    private ArrayList<Point> potentialMoves = new ArrayList<>();
+
 
     public ChessPiece(PieceEnum t, ColourEnum c, Integer x, Integer y, Integer px) {
         super();
