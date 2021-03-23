@@ -44,6 +44,7 @@ public class Chessboard {
         GridPane grid = new GridPane();
         overlay = new StackPane();
         pane = new Pane();
+        pane.setVisible(false);
         this.pxSquareEdge = this.pxSideLength / 8;
         var colour = 0;
         for (var x = 0; x < SIDE_SQUARES; x++) {
@@ -65,7 +66,7 @@ public class Chessboard {
         highlighted.setVisible(false);
         highlighted.setFill(Color.GREY);
         this.board = grid;
-        this.overlay.getChildren().addAll(this.board);
+        this.overlay.getChildren().addAll(this.board, pane);
         grid.getChildren().add(highlighted);
         setPieces();
         movementControl();
@@ -105,10 +106,9 @@ public class Chessboard {
                 GridPane.setRowIndex(highlighted, (int)event.getSceneY()/this.pxSquareEdge);
                 GridPane.setColumnIndex(highlighted, (int)event.getSceneX()/this.pxSquareEdge);
                 board.getChildren().remove(piece);
-                overlay.getChildren().add(pane);
-                highlighted.setVisible(true);
                 drawLegalMoves(); // JUST ADDED THIS
-                pane.getChildren().add(piece);
+                pane.getChildren().add(piece); pane.setVisible(true);
+                highlighted.setVisible(true);
 
                 pane.setOnMouseDragged((MouseEvent e) -> {
                     GridPane.setRowIndex(highlighted, (int)e.getY()/this.pxSquareEdge);
@@ -117,10 +117,9 @@ public class Chessboard {
                 });
 
                 piece.setOnMouseReleased((MouseEvent e) -> {
-                    pane.getChildren().clear();
+                    pane.getChildren().clear(); pane.setVisible(false);
                     highlighted.setVisible(false);
                     dropPiece(piece, e); // AND THIS
-                    overlay.getChildren().remove(pane);
                     board.getChildren().add(piece);
                     board.setOnMouseDragged(null);
                 });
