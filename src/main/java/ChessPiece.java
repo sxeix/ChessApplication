@@ -50,8 +50,6 @@ public class ChessPiece extends ImageView {
             this.setCursor(Cursor.HAND);
             GridPane.setRowIndex(this, this.getYCoord());
             GridPane.setColumnIndex(this, this.getXCoord());
-        } else {
-            System.out.println("Image not found");
         }
     }
 
@@ -59,7 +57,7 @@ public class ChessPiece extends ImageView {
         try {
             return new Image("Images/" + getPieceString() + "_" + getColourString() + ".png");
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e + " --- Image not found");
         }
         return null;
     }
