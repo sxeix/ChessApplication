@@ -130,13 +130,6 @@ public class Chessboard {
     }
 
     public void drawLegalMoves(ChessPiece piece){
-        int test = 1;
-        for (ChessPiece chessPiece : pieces) {
-            if (chessPiece.getType() == PieceEnum.PAWN) {
-                System.out.println(test + " " + chessPiece.getColourString());
-                test++;
-            }
-        }
         for(Point coords: piece.getPotentialMoves()){
             Circle high = new Circle(this.pxSquareEdge/6);
             high.setFill(Color.GREY);
@@ -148,15 +141,17 @@ public class Chessboard {
     public void dropPiece(ChessPiece piece, MouseEvent e){
         for(Point coords: piece.getPotentialMoves()){
             if(coords.getX() == (int)e.getSceneX()/this.pxSquareEdge && coords.getY() == (int)e.getSceneY()/this.pxSquareEdge){
-                piece.setXCoord((int)coords.getX()); piece.setYCoord((int)coords.getY());
-//                updatePieces(piece, (int)coords.getX(), (int)coords.getY());
+                updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 turnColour = turnColour.equals(ColourEnum.WHITE) ? ColourEnum.BLACK : ColourEnum.WHITE;
                 board.getChildren()
                         .stream()
                         .filter(x -> x instanceof ChessPiece)
                         .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
                         .findFirst()
-                        .ifPresent(pieceBelow -> board.getChildren().remove(pieceBelow));
+                        .ifPresent( pieceBelow -> {
+                            board.getChildren().remove(pieceBelow);
+                            pieces.remove(pieceBelow);
+                        });
             }
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
