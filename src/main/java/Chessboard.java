@@ -130,6 +130,13 @@ public class Chessboard {
     }
 
     public void drawLegalMoves(ChessPiece piece){
+        int test = 1;
+        for (ChessPiece chessPiece : pieces) {
+            if (chessPiece.getType() == PieceEnum.PAWN) {
+                System.out.println(test + " " + chessPiece.getColourString());
+                test++;
+            }
+        }
         for(Point coords: piece.getPotentialMoves()){
             Circle high = new Circle(this.pxSquareEdge/6);
             high.setFill(Color.GREY);
@@ -141,7 +148,8 @@ public class Chessboard {
     public void dropPiece(ChessPiece piece, MouseEvent e){
         for(Point coords: piece.getPotentialMoves()){
             if(coords.getX() == (int)e.getSceneX()/this.pxSquareEdge && coords.getY() == (int)e.getSceneY()/this.pxSquareEdge){
-                updatePieces(piece, (int)coords.getX(), (int)coords.getY());
+                piece.setXCoord((int)coords.getX()); piece.setYCoord((int)coords.getY());
+//                updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 turnColour = turnColour.equals(ColourEnum.WHITE) ? ColourEnum.BLACK : ColourEnum.WHITE;
                 board.getChildren()
                         .stream()
