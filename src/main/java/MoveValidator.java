@@ -52,9 +52,6 @@ public class MoveValidator {
      * can tidy up this messy logic another day, just want to get it working for now
      */
     public ArrayList<Point> legalPawnMoves(ChessPiece p, ArrayList<ChessPiece> pieces) {
-        // Current piece being moved coordinate
-        System.out.println("start " + p.getCurrentPos());
-        pieces.stream().filter(x -> x.getColour() == ColourEnum.WHITE && x.getType() == PieceEnum.PAWN).forEach(x -> System.out.print(x.getCurrentPos()));
         HashSet<Point> illegalMoves = new HashSet<>();
         var legalMoves = new ArrayList<Point>();
         final var boardPoints = toPoints(pieces);
@@ -77,9 +74,6 @@ public class MoveValidator {
                 )
         };
         final var moves = new ArrayList<Point>(Arrays.asList(potentialMoves));
-
-        System.out.println("the starting moves are");
-        moves.forEach(System.out::println);
 
         pieces.forEach(piece -> {
             if (comparePoints(piece.getCurrentPos(), moves.get(0))) {
@@ -109,8 +103,6 @@ public class MoveValidator {
             illegalMoves.add(moves.get(1));
         }
 
-        System.out.println("the illegal moves are");
-        illegalMoves.forEach(System.out::println);
         for(Point move: moves) {
             if (!illegalMoves.contains(move)) {
                 legalMoves.add(move);
