@@ -1,16 +1,9 @@
 import enums.ColourEnum;
-import enums.PieceEnum;
-import javafx.util.Pair;
 import lombok.NoArgsConstructor;
-
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @NoArgsConstructor
 public class MoveValidator {
