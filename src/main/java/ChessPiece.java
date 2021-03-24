@@ -40,18 +40,26 @@ public class ChessPiece extends ImageView {
         this.yCoord = y;
         this.type = t;
         this.colour = c;
-        this.setImage(getPieceImage());
-        this.setSmooth(true);
-        // Sizes to tile
-        this.setFitHeight(px);
-        this.setFitWidth(px);
-        this.setCursor(Cursor.HAND);
-        GridPane.setRowIndex(this, this.getYCoord());
-        GridPane.setColumnIndex(this, this.getXCoord());
+        Image pieceImage = getPieceImage();
+        if (pieceImage != null) {
+            this.setImage(pieceImage);
+            this.setSmooth(true);
+            // Sizes to tile
+            this.setFitHeight(px);
+            this.setFitWidth(px);
+            this.setCursor(Cursor.HAND);
+            GridPane.setRowIndex(this, this.getYCoord());
+            GridPane.setColumnIndex(this, this.getXCoord());
+        }
     }
 
     public Image getPieceImage() {
-        return new Image("Images/" + getPieceString() + "_" + getColourString() + ".png");
+        try {
+            return new Image("Images/" + getPieceString() + "_" + getColourString() + ".png");
+        } catch (Exception e) {
+            System.out.println(e + " --- Image not found");
+        }
+        return null;
     }
 
     public String getPieceString() {

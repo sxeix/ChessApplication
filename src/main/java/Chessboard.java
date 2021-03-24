@@ -18,9 +18,9 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class Chessboard {
     @NonNull
-    private Integer pxSideLength;
+    private  final Integer pxSideLength;
 
-    private static Integer SIDE_SQUARES = 8;
+    private static final Integer SIDE_SQUARES = 8;
 
     private Integer pxSquareEdge;
 
@@ -157,5 +157,4 @@ public class Chessboard {
     public boolean validateColour(ChessPiece piece){
         return piece.getColour().equals(turnColour);
     }
-
 }
