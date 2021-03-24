@@ -33,6 +33,8 @@ public class ChessPiece extends ImageView {
     @Setter
     private ArrayList<Point> potentialMoves = new ArrayList<>();
 
+    @Getter
+    private Integer moveNum = 0;
 
     public ChessPiece(PieceEnum t, ColourEnum c, Integer x, Integer y, Integer px) {
         super();
@@ -78,4 +80,20 @@ public class ChessPiece extends ImageView {
         // Converts the ColourEnum to string
         return this.colour == ColourEnum.WHITE ? "white" : "black";
     }
+
+    // Not used anywhere yet but might be useful in the future :)
+    public Point getCurrentPos() {
+        return new Point(this.xCoord,this.yCoord);
+    }
+
+    public void moveTo(int x, int y) {
+        this.moveNum++;
+        setXCoord(x);
+        setYCoord(y);
+    }
+    // Just for debugging purposes
+    public void prettyPrintCoord() {
+        System.out.println("(" + (this.xCoord + 1) + "," + (8 - this.yCoord) + ")");
+    }
+
 }

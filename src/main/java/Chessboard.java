@@ -141,7 +141,7 @@ public class Chessboard {
     public void dropPiece(ChessPiece piece, MouseEvent e){
         for(Point coords: piece.getPotentialMoves()){
             if(coords.getX() == (int)e.getSceneX()/this.pxSquareEdge && coords.getY() == (int)e.getSceneY()/this.pxSquareEdge){
-                piece.setXCoord((int)coords.getX()); piece.setYCoord((int)coords.getY());
+                updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 turnColour = turnColour.equals(ColourEnum.WHITE) ? ColourEnum.BLACK : ColourEnum.WHITE;
                 board.getChildren()
                         .stream()
@@ -152,6 +152,14 @@ public class Chessboard {
             }
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
+    }
+
+    public void updatePieces(ChessPiece p, int x, int y ) {
+        pieces.forEach(piece -> {
+            if (validator.comparePoints(piece.getCurrentPos(), p.getCurrentPos())) {
+                piece.moveTo(x,y);
+            }
+        });
     }
 
     public boolean validateColour(ChessPiece piece){
