@@ -26,26 +26,28 @@ public class StartupScreen {
         whiteSelect.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2; -fx-background-radius: 5, 4, 3;");
         blackSelect.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2; -fx-background-radius: 5, 4, 3;");
 
-        Label title = new Label("Sample Text Here");
+        Label title = new Label("Chess Application");
         title.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 40));
-        title.setMinSize(600 ,50); title.setLayoutY(50); title.setAlignment(Pos.CENTER);
+        title.setMinSize(600 ,50); title.setLayoutY(30); title.setAlignment(Pos.CENTER);
+
+        Label credit = new Label("by James and Royston");
+        credit.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        credit.setMinSize(600 ,50); credit.setLayoutY(70); credit.setAlignment(Pos.CENTER);
 
         Label colorPick = new Label("Please Select Black or White");
         colorPick.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
         colorPick.setMinSize(600 ,50); colorPick.setLayoutY(150); colorPick.setAlignment(Pos.CENTER);
 
-        display.getChildren().addAll(whiteSelect, blackSelect, title, colorPick);
+        display.getChildren().addAll(whiteSelect, blackSelect, title, credit, colorPick);
 
-        blackSelect.setOnMouseClicked((MouseEvent e) ->{
-            Chessboard chessboard = new Chessboard(600, ColourEnum.BLACK);
-            chessboard.initBoard();
-            Chess.scene.setRoot(chessboard.getOverlay());
-        });
+        blackSelect.setOnMouseClicked((MouseEvent e) -> createChessboard(ColourEnum.BLACK));
 
-        whiteSelect.setOnMouseClicked((MouseEvent e) ->{
-            Chessboard chessboard = new Chessboard(600, ColourEnum.WHITE);
-            chessboard.initBoard();
-            Chess.scene.setRoot(chessboard.getOverlay());
-        });
+        whiteSelect.setOnMouseClicked((MouseEvent e) -> createChessboard(ColourEnum.WHITE));
+    }
+
+    public void createChessboard(ColourEnum colour){
+        Chessboard chessboard = new Chessboard(600, colour);
+        chessboard.initBoard();
+        Chess.scene.setRoot(chessboard.getOverlay());
     }
 }

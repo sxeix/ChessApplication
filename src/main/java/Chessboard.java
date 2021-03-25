@@ -48,8 +48,6 @@ public class Chessboard {
 
     private ColourEnum turnColour = ColourEnum.WHITE;
 
-    private final BoardHandler handler = new BoardHandler(this);
-
     public void initBoard() {
         GridPane grid = new GridPane();
         overlay = new StackPane();
@@ -79,7 +77,7 @@ public class Chessboard {
         this.overlay.getChildren().addAll(this.board, pane);
         grid.getChildren().add(highlighted);
         setPieces();
-        handler.initialisePlayerColour();
+        initialisePlayerColour();
         movementControl();
     }
 
@@ -115,14 +113,14 @@ public class Chessboard {
             piece.setOnMousePressed((MouseEvent event) -> {
                 if(!validateColour(piece)) return;
                 validator.calculateLegalMoves(piece, this.pieces);
-                handler.onClickHighlight(event);
+                onClickHighlight(event);
                 board.getChildren().remove(piece);
                 drawLegalMoves(piece);
                 pane.getChildren().add(piece); pane.setVisible(true);
                 highlighted.setVisible(true);
 
                 pane.setOnMouseDragged((MouseEvent e) -> {
-                    handler.highlightMovement(e);
+                    highlightMovement(e);
                     piece.relocate(e.getX() - this.pxSquareEdge/2, e.getY() - this.pxSquareEdge/2);
                 });
 
@@ -149,7 +147,7 @@ public class Chessboard {
 
     public void dropPiece(ChessPiece piece, MouseEvent e){
         for(Point coords: piece.getPotentialMoves()){
-            if(handler.isValidDrop(coords, e)){
+            if(isValidDrop(coords, e)){
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 turnColour = turnColour.equals(ColourEnum.WHITE) ? ColourEnum.BLACK : ColourEnum.WHITE;
                 board.getChildren()
@@ -176,5 +174,44 @@ public class Chessboard {
 
     public boolean validateColour(ChessPiece piece){
         return piece.getColour().equals(turnColour);
+    }
+
+    public void initialisePlayerColour(){
+        if(playerColour.equals(ColourEnum.BLACK)){
+            board.setRotate(180); pane.setRotate(180);
+            board.getChildren()
+                    .stream()
+                    .filter(x -> x instanceof ChessPiece)
+                    .forEach(x -> x.setRotate(180));
+        }
+    }
+
+    public void onClickHighlight(MouseEvent event){
+        if(playerColour.equals(ColourEnum.BLACK)){
+            GridPane.setRowIndex(highlighted, 7 - (int)event.getSceneY()/pxSquareEdge);
+            GridPane.setColumnIndex(highlighted, 7 - (int)event.getSceneX()/pxSquareEdge);
+        }
+        else{
+            GridPane.setRowIndex(highlighted, (int)event.getSceneY()/pxSquareEdge);
+            GridPane.setColumnIndex(highlighted, (int)event.getSceneX()/pxSquareEdge);
+        }
+    }
+
+    public void highlightMovement(MouseEvent e){
+        if(isOnBoard(e.getX(), e.getY())){
+            GridPane.setRowIndex(highlighted, (int)e.getY()/pxSquareEdge);
+            GridPane.setColumnIndex(highlighted, (int)e.getX()/pxSquareEdge);
+        }
+    }
+
+    public boolean isOnBoard(double xCoord, double yCoord){
+        return xCoord > 0 && xCoord < pxSideLength && yCoord > 0 && yCoord < pxSideLength;
+    }
+
+    public boolean isValidDrop(Point coords, MouseEvent e){
+        if(!isOnBoard(e.getSceneX(), e.getSceneY())) return false;
+        return playerColour.equals(ColourEnum.BLACK) ?
+                7 - coords.getX() == (int)e.getSceneX()/pxSquareEdge && 7 - coords.getY() == (int)e.getSceneY()/pxSquareEdge :
+                coords.getX() == (int)e.getSceneX()/pxSquareEdge && coords.getY() == (int)e.getSceneY()/pxSquareEdge;
     }
 }
