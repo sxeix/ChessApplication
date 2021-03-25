@@ -44,7 +44,6 @@ public class MoveValidator {
      */
     public ArrayList<Point> legalKnightMoves(ChessPiece knight, ArrayList<ChessPiece> pieces) {
         int x = knight.getXCoord(); int y = knight.getYCoord();
-        ArrayList<Point> illegalMoves = new ArrayList<>();
         final var potentialMoves = new Point[]{
                 new Point(x + 2, y - 1), new Point(x + 2, y + 1),
                 new Point(x - 2, y - 1), new Point(x - 2, y + 1),
@@ -55,8 +54,8 @@ public class MoveValidator {
 
         pieces.stream()
                 .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()) && potentialMove.getColour() == knight.getColour())
-                .forEach(invalidMove -> illegalMoves.add(invalidMove.getCurrentPos()));
-        return resolveLegalMoves(moves, illegalMoves);
+                .forEach(invalidMove -> moves.remove(invalidMove.getCurrentPos()));
+        return moves;
     }
 
     /**
@@ -68,7 +67,6 @@ public class MoveValidator {
      */
     public ArrayList<Point> legalPawnMoves(ChessPiece p, ArrayList<ChessPiece> pieces) {
         ArrayList<Point> illegalMoves = new ArrayList<>();
-//        var legalMoves = new ArrayList<Point>();
         final var boardPoints = toPoints(pieces);
         final var potentialMoves = new Point[]{
                 new Point(
