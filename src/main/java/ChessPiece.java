@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.awt.*;
 import java.util.ArrayList;
 

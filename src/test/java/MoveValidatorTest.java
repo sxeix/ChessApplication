@@ -1,16 +1,11 @@
 import enums.ColourEnum;
 import enums.PieceEnum;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.core.Is.is;
 
 public class MoveValidatorTest {
 // --- Use these points and uncomment ones that you wish to expect from the validation method ---
