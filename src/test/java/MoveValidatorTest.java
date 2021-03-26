@@ -156,7 +156,7 @@ public class MoveValidatorTest {
     public void knight_all_moves_test() {
         final var validator = new MoveValidator();
         final var emptyBoardPieces = new ArrayList<ChessPiece>();
-        var knight = new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, 4, 4, 75);
+        final var knight = new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, 4, 4, 75);
 
         final var points = new Point[]{
                 new Point(knight.getXCoord() + 2, knight.getYCoord() - 1),
@@ -168,7 +168,30 @@ public class MoveValidatorTest {
                 new Point(knight.getXCoord() + 1, knight.getYCoord() - 2),
                 new Point(knight.getXCoord() - 1, knight.getYCoord() - 2),
         };
-        final var validMoves = new ArrayList<>(validator.legalKnightMoves(knight, emptyBoardPieces));
+
+        final var validMoves = validator.legalKnightMoves(knight, emptyBoardPieces);
+        assertThat(validMoves, containsInAnyOrder(points));
+    }
+
+    @Test
+    public void knight_no_moves_test() {
+        final var validator = new MoveValidator();
+        final var knight = new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, 4, 4, 75);
+
+        final var boardPieces = new ChessPiece[]{
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() + 2, knight.getYCoord() - 1, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() + 2, knight.getYCoord() + 1, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() - 2, knight.getYCoord() - 1, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() - 2, knight.getYCoord() + 1, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() + 1, knight.getYCoord() + 2, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() - 1, knight.getYCoord() + 2, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() + 1, knight.getYCoord() - 2, 75),
+                new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, knight.getXCoord() - 1, knight.getYCoord() - 2, 75),
+        };
+
+        final var pieces = new ArrayList<>(Arrays.asList(boardPieces));
+        final var points = new Point[]{};
+        final var validMoves = validator.legalKnightMoves(knight, pieces);
         assertThat(validMoves, containsInAnyOrder(points));
     }
 

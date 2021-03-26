@@ -50,7 +50,7 @@ public class MoveValidator {
                 new Point(x + 1, y + 2), new Point(x - 1, y + 2),
                 new Point(x + 1, y - 2), new Point(x - 1, y - 2)
         };
-        final var moves = new ArrayList<Point>(Arrays.asList(potentialMoves));
+        final var moves = new ArrayList<>(Arrays.asList(potentialMoves));
 
         pieces.stream()
                 .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()) && potentialMove.getColour() == knight.getColour())
