@@ -3,7 +3,6 @@ import lombok.NoArgsConstructor;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 
 @NoArgsConstructor
 public class MoveValidator {
@@ -14,28 +13,88 @@ public class MoveValidator {
             case ROOK -> p.setPotentialMoves(legalRookMoves(p, pieces));
             case BISHOP -> p.setPotentialMoves(legalBishopMoves(p, pieces));
             case PAWN -> p.setPotentialMoves(legalPawnMoves(p, pieces));
+            case KNIGHT -> p.setPotentialMoves(legalKnightMoves(p, pieces));
+            case QUEEN -> p.setPotentialMoves(legalQueenMoves(p, pieces));
             default -> p.setPotentialMoves(legalRookMoves(p, pieces));
         }
     }
 
-    public ArrayList<Point> legalRookMoves(ChessPiece p, ArrayList<ChessPiece> pieces) {
-        ArrayList<Point> coords = new ArrayList<>();
-        coords.add(new Point(5, 2));
-        coords.add(new Point(5, 3));
-        coords.add(new Point(5, 4));
-        coords.add(new Point(5, 5));
-        return coords;
+    public ArrayList<Point> legalRookMoves(ChessPiece rook, ArrayList<ChessPiece> pieces) {
+        int x = rook.getXCoord(); int y = rook.getYCoord();
+        ArrayList<Point> moves = new ArrayList<>();
+        for(int i = 1; i < 8; i++){
+            moves.add(new Point(x + i, y)); moves.add(new Point(x - i, y));
+            moves.add(new Point(x, y + i)); moves.add(new Point(x, y - i));
+        }
+        pieces.stream()
+                .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()))
+                .forEach(invalidMove -> {
+                    if (invalidMove.getColour() == rook.getColour()) moves.remove(invalidMove.getCurrentPos());
+                    if (invalidMove.getXCoord().equals(x))
+                        if (invalidMove.getYCoord() > y)
+                            for (int i = invalidMove.getYCoord() + 1; i < 8; i++) moves.remove(new Point(x, i));
+                        else
+                            for (int i = invalidMove.getYCoord() - 1; i >= 0; i--) moves.remove(new Point(x, i));
+                    else
+                        if (invalidMove.getXCoord() > x)
+                            for (int i = invalidMove.getXCoord() + 1; i < 8; i++) moves.remove(new Point(i, y));
+                        else
+                            for (int i = invalidMove.getXCoord() - 1; i >= 0; i--) moves.remove(new Point(i, y));
+                });
+        return moves;
     }
 
-    public ArrayList<Point> legalBishopMoves(ChessPiece p, ArrayList<ChessPiece> pieces) {
-        ArrayList<Point> coords = new ArrayList<>();
-        coords.add(new Point(3, 2));
-        coords.add(new Point(3, 3));
-        coords.add(new Point(3, 4));
-        coords.add(new Point(3, 5));
-        return coords;
+    public ArrayList<Point> legalBishopMoves(ChessPiece bishop, ArrayList<ChessPiece> pieces) {
+        int x = bishop.getXCoord(); int y = bishop.getYCoord();
+        ArrayList<Point> moves = new ArrayList<>();
+        for(int i = 1; i < 8; i++){
+            moves.add(new Point(x + i, y + i)); moves.add(new Point(x - i, y - i));
+            moves.add(new Point(x - i, y + i)); moves.add(new Point(x + i, y - i));
+        }
+        pieces.stream()
+                .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()))
+                .forEach(invalidMove -> {
+                    if (invalidMove.getColour() == bishop.getColour()) moves.remove(invalidMove.getCurrentPos());
+                    if (invalidMove.getXCoord() > x)
+                        if (invalidMove.getYCoord() > y)
+                            for (int i = invalidMove.getYCoord() + 1, j = invalidMove.getXCoord() + 1; i<8 && j<8; i++, j++) moves.remove(new Point(j, i));
+                        else
+                            for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() + 1; i>=0 && j<8; i--, j++) moves.remove(new Point(j, i));
+                    else
+                        if (invalidMove.getYCoord() > y)
+                            for (int i = invalidMove.getYCoord() + 1, j = invalidMove.getXCoord() - 1; i<8 && j>=0; i++, j--) moves.remove(new Point(j, i));
+                        else
+                            for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() - 1; i>=0 && j>=0; i--, j--) moves.remove(new Point(j, i));
+                });
+        return moves;
     }
 
+    public ArrayList<Point> legalQueenMoves(ChessPiece queen, ArrayList<ChessPiece> pieces) {
+        ArrayList<Point> moves = new ArrayList<>();
+        moves.addAll(legalBishopMoves(queen, pieces));
+        moves.addAll(legalRookMoves(queen, pieces));
+        return moves;
+    }
+
+    /**
+     * Conditions:
+     * Cannot move to a position if a piece of same colour is already there
+     */
+    public ArrayList<Point> legalKnightMoves(ChessPiece knight, ArrayList<ChessPiece> pieces) {
+        int x = knight.getXCoord(); int y = knight.getYCoord();
+        final var potentialMoves = new Point[]{
+                new Point(x + 2, y - 1), new Point(x + 2, y + 1),
+                new Point(x - 2, y - 1), new Point(x - 2, y + 1),
+                new Point(x + 1, y + 2), new Point(x - 1, y + 2),
+                new Point(x + 1, y - 2), new Point(x - 1, y - 2)
+        };
+        final var moves = new ArrayList<>(Arrays.asList(potentialMoves));
+
+        pieces.stream()
+                .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()) && potentialMove.getColour() == knight.getColour())
+                .forEach(invalidMove -> moves.remove(invalidMove.getCurrentPos()));
+        return moves;
+    }
 
     /**
      * Conditions:
@@ -45,8 +104,7 @@ public class MoveValidator {
      * can tidy up this messy logic another day, just want to get it working for now
      */
     public ArrayList<Point> legalPawnMoves(ChessPiece p, ArrayList<ChessPiece> pieces) {
-        HashSet<Point> illegalMoves = new HashSet<>();
-        var legalMoves = new ArrayList<Point>();
+        ArrayList<Point> illegalMoves = new ArrayList<>();
         final var boardPoints = toPoints(pieces);
         final var potentialMoves = new Point[]{
                 new Point(
@@ -76,10 +134,10 @@ public class MoveValidator {
             if (comparePoints(piece.getCurrentPos(), moves.get(1))) {
                 illegalMoves.add(moves.get(1));
             }
-            if(comparePoints(piece.getCurrentPos(), moves.get(2)) && piece.getColour().equals( p.getColour())) {
+            if (comparePoints(piece.getCurrentPos(), moves.get(2)) && piece.getColour().equals(p.getColour())) {
                 illegalMoves.add(moves.get(2));
             }
-            if(comparePoints(piece.getCurrentPos(), moves.get(3)) && piece.getColour().equals(p.getColour())) {
+            if (comparePoints(piece.getCurrentPos(), moves.get(3)) && piece.getColour().equals(p.getColour())) {
                 illegalMoves.add(moves.get(3));
             }
         });
@@ -92,16 +150,10 @@ public class MoveValidator {
             illegalMoves.add(moves.get(3));
         }
         // Is it first move
-        if(p.getMoveNum() != 0) {
+        if (p.getMoveNum() != 0) {
             illegalMoves.add(moves.get(1));
         }
-
-        for(Point move: moves) {
-            if (!illegalMoves.contains(move)) {
-                legalMoves.add(move);
-            }
-        }
-        return legalMoves;
+        return resolveLegalMoves(moves, illegalMoves);
     }
 
     public ArrayList<Point> toPoints(ArrayList<ChessPiece> arr) {
@@ -113,5 +165,14 @@ public class MoveValidator {
 
     public boolean comparePoints(Point point, Point otherPoint) {
         return point.getX() == otherPoint.getX() && point.getY() == otherPoint.getY();
+    }
+
+
+    public ArrayList<Point> resolveLegalMoves(ArrayList<Point> potentialMoves, ArrayList<Point> illegalMoves) {
+        var legalMoves = new ArrayList<Point>();
+        potentialMoves.stream()
+                .filter(move -> !illegalMoves.contains(move))
+                .forEach(legalMoves::add);
+        return legalMoves;
     }
 }
