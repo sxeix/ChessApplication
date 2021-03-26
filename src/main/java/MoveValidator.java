@@ -2,10 +2,8 @@ import enums.ColourEnum;
 import lombok.NoArgsConstructor;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 
 @NoArgsConstructor
 public class MoveValidator {
