@@ -6,6 +6,8 @@
 .idea/
 *.iml
 *.iws
+out/
+src/main/resources/META-INF/
  
 # Mac
 .DS_Store
