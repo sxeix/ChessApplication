@@ -41,7 +41,7 @@ public class MoveValidator {
                         else
                             for (int i = invalidMove.getXCoord() - 1; i >= 0; i--) moves.remove(new Point(i, y));
                 });
-        return moves;
+        return removeIllegalPositions(moves);
     }
 
     public ArrayList<Point> legalBishopMoves(ChessPiece bishop, ArrayList<ChessPiece> pieces) {
@@ -66,7 +66,7 @@ public class MoveValidator {
                         else
                             for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() - 1; i>=0 && j>=0; i--, j--) moves.remove(new Point(j, i));
                 });
-        return moves;
+        return removeIllegalPositions(moves);
     }
 
     public ArrayList<Point> legalQueenMoves(ChessPiece queen, ArrayList<ChessPiece> pieces) {
@@ -93,7 +93,7 @@ public class MoveValidator {
         pieces.stream()
                 .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()) && potentialMove.getColour() == knight.getColour())
                 .forEach(invalidMove -> moves.remove(invalidMove.getCurrentPos()));
-        return moves;
+        return removeIllegalPositions(moves);
     }
 
     /**
@@ -153,7 +153,7 @@ public class MoveValidator {
         if (p.getMoveNum() != 0) {
             illegalMoves.add(moves.get(1));
         }
-        return resolveLegalMoves(moves, illegalMoves);
+        return removeIllegalPositions(resolveLegalMoves(moves, illegalMoves));
     }
 
     public ArrayList<Point> toPoints(ArrayList<ChessPiece> arr) {
@@ -174,5 +174,14 @@ public class MoveValidator {
                 .filter(move -> !illegalMoves.contains(move))
                 .forEach(legalMoves::add);
         return legalMoves;
+    }
+
+    public ArrayList<Point> removeIllegalPositions(ArrayList<Point> moves){
+        moves.removeIf(this::isOffGrid);
+        return moves;
+    }
+
+    public boolean isOffGrid(Point move){
+        return move.getX() > 7 || move.getX() < 0 || move.getY() > 7 || move.getY() < 0;
     }
 }
