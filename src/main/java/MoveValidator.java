@@ -4,7 +4,6 @@ import lombok.NoArgsConstructor;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 
 @NoArgsConstructor
 public class MoveValidator {
@@ -17,7 +16,7 @@ public class MoveValidator {
             case PAWN -> p.setPotentialMoves(legalPawnMoves(p, pieces));
             case KNIGHT -> p.setPotentialMoves(legalKnightMoves(p, pieces));
             case QUEEN -> p.setPotentialMoves(legalQueenMoves(p, pieces));
-            case KING -> p.setPotentialMoves(legalKingMoves(p, pieces, 0));
+            case KING -> p.setPotentialMoves(legalKingMoves(p, pieces));
         }
     }
 
@@ -84,24 +83,32 @@ public class MoveValidator {
      * Cannot move to a point if it is currently under threat by the other pieces of alternate colour
      * --- Need to update this method for edge cases such as castling ---
      */
-    public ArrayList<Point> legalKingMoves(ChessPiece king, ArrayList<ChessPiece> pieces, Integer iteration) {
+    public ArrayList<Point> legalKingMoves(ChessPiece king, ArrayList<ChessPiece> pieces) {
         int x = king.getXCoord(); int y = king.getYCoord();
         // There is probably a much nicer way to do this than what I have come up with, however this can be refactored once testing is in place
-        var dangerousMoves = calculateThreatMoves(pieces, king.getColour(), iteration);
+        var dangerousMoves = calculateThreatMoves(pieces, king.getColour());
         final var potentialMoves = new ArrayList<Point>();
-        for (int i = x - 1; i < x + 2; i++) {
-            for (int j = y - 1; j < y + 2; j++) {
-                if (!(i == king.getXCoord() && j == king.getYCoord())){
+        for (int i = x - 1; i < x + 2; i++)
+            for (int j = y - 1; j < y + 2; j++)
+                if (!(i == king.getXCoord() && j == king.getYCoord()))
                     potentialMoves.add(new Point(i,j));
-                }
-            }
-        }
 
+        dangerousMoves.forEach(potentialMoves::remove);
         pieces.stream()
                 .filter(potentialMove -> potentialMoves.contains(potentialMove.getCurrentPos()) && potentialMove.getColour() == king.getColour())
                 .forEach(invalidMove -> potentialMoves.remove(invalidMove.getCurrentPos()));
+        ChessPiece otherKing = pieces.stream()
+                .filter(piece -> piece.getType() == PieceEnum.KING && king.getColour() != piece.getColour())
+                .findFirst()
+                .get();
+        ArrayList<Point> invalidMoves = new ArrayList<>();
+        potentialMoves.forEach(potentialMove ->{
+                    for (int i = (int)potentialMove.getX() - 1; i < (int)potentialMove.getX() + 2; i++)
+                        for (int j = (int)potentialMove.getY() - 1; j < (int)potentialMove.getY() + 2; j++)
+                            if (otherKing.getCurrentPos().equals(new Point(i, j))) invalidMoves.add(potentialMove);
+                });
+        potentialMoves.removeAll(invalidMoves);
 
-        dangerousMoves.forEach(potentialMoves::remove);
         return potentialMoves;
     }
 
@@ -125,19 +132,11 @@ public class MoveValidator {
         return removeIllegalPositions(moves);
     }
 
-    public ArrayList<Point> allPossiblePawnMoves(ChessPiece p, ArrayList<ChessPiece> pieces) {
-        ArrayList<Point> normalValidMoves = new ArrayList<Point>(legalPawnMoves(p, pieces));
-        normalValidMoves.add(
-                new Point(
-                        p.getXCoord() - 1,
-                        (p.getColour() == ColourEnum.WHITE ? p.getYCoord() - 1 : p.getYCoord() + 1))
-        );
-        normalValidMoves.add(
-                new Point(
-                        p.getXCoord() + 1,
-                        (p.getColour() == ColourEnum.WHITE ? p.getYCoord() - 1 : p.getYCoord() + 1))
-        );
-        return removeIllegalPositions(normalValidMoves);
+    public ArrayList<Point> allPawnCaptureMoves(ChessPiece p) {
+        ArrayList<Point> captureMoves = new ArrayList<>();
+        captureMoves.add(new Point(p.getXCoord() - 1, (p.getColour() == ColourEnum.WHITE ? p.getYCoord() - 1 : p.getYCoord() + 1)));
+        captureMoves.add(new Point(p.getXCoord() + 1, (p.getColour() == ColourEnum.WHITE ? p.getYCoord() - 1 : p.getYCoord() + 1)));
+        return removeIllegalPositions(captureMoves);
     }
 
     /**
@@ -229,26 +228,19 @@ public class MoveValidator {
         return move.getX() > 7 || move.getX() < 0 || move.getY() > 7 || move.getY() < 0;
     }
 
-    public ArrayList<Point> calculateThreatMoves(ArrayList<ChessPiece> pieces, ColourEnum curMoveColour, Integer iteration) {
-        HashSet<Point> threatMoves = new HashSet<>();
+    public ArrayList<Point> calculateThreatMoves(ArrayList<ChessPiece> pieces, ColourEnum curMoveColour) {
+        ArrayList<Point> threatMoves = new ArrayList<>();
         pieces.stream()
                 .filter(piece -> piece.getColour() != curMoveColour)
                 .forEach(piece -> {
                     switch (piece.getType()) {
                         case ROOK -> threatMoves.addAll(legalRookMoves(piece, pieces));
                         case BISHOP -> threatMoves.addAll(legalBishopMoves(piece, pieces));
-                        case PAWN -> threatMoves.addAll(allPossiblePawnMoves(piece, pieces));
+                        case PAWN -> threatMoves.addAll(allPawnCaptureMoves(piece));
                         case KNIGHT -> threatMoves.addAll(legalKnightMoves(piece, pieces));
                         case QUEEN -> threatMoves.addAll(legalQueenMoves(piece, pieces));
                     }
                 });
-        var otherKing = pieces.stream()
-                .filter(piece -> piece.getType() == PieceEnum.KING && curMoveColour != piece.getColour())
-                .findFirst()
-                .get(); // this get method is because findFirst returns an Optional<>. This essentially means it can return null and not break the program.
-                        // Storing it in an optional means we have to 'get' the value
-        // This is to avoid recursion
-        if (iteration == 0) threatMoves.addAll(legalKingMoves(otherKing, pieces, iteration + 1));
         return new ArrayList<>(threatMoves);
     }
 }
