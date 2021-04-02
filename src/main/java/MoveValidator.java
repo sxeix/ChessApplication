@@ -97,18 +97,15 @@ public class MoveValidator {
         pieces.stream()
                 .filter(potentialMove -> potentialMoves.contains(potentialMove.getCurrentPos()) && potentialMove.getColour() == king.getColour())
                 .forEach(invalidMove -> potentialMoves.remove(invalidMove.getCurrentPos()));
+        ChessPiece otherKing = pieces.stream()
+                .filter(piece -> piece.getType() == PieceEnum.KING && king.getColour() != piece.getColour())
+                .findFirst()
+                .get();
         ArrayList<Point> invalidMoves = new ArrayList<>();
         potentialMoves.forEach(potentialMove ->{
                     for (int i = (int)potentialMove.getX() - 1; i < (int)potentialMove.getX() + 2; i++)
                         for (int j = (int)potentialMove.getY() - 1; j < (int)potentialMove.getY() + 2; j++)
-                            if (!(i == (int)potentialMove.getX() && j == (int)potentialMove.getY())) {
-                                Point loc = new Point(i, j);
-                                pieces.stream()
-                                        .filter(piece -> piece.getType().equals(PieceEnum.KING) && piece.getColour() != king.getColour())
-                                        .forEach(otherKing -> {
-                                            if (otherKing.getCurrentPos().equals(loc)) invalidMoves.add(potentialMove);
-                                        });
-                            }
+                            if (otherKing.getCurrentPos().equals(new Point(i, j))) invalidMoves.add(potentialMove);
                 });
         potentialMoves.removeAll(invalidMoves);
 
