@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 
 public class MoveValidatorTest {
 // --- Use these points and uncomment ones that you wish to expect from the validation method ---
@@ -47,6 +48,7 @@ public class MoveValidatorTest {
                 )
         };
         assertThat(validator.legalPawnMoves(piece, pieces), containsInAnyOrder(points));
+        assertThat(validator.legalPawnMoves(piece, pieces).size(), equalTo(points.length));
     }
 
     @Test
@@ -65,6 +67,7 @@ public class MoveValidatorTest {
                 )
         };
         assertThat(validator.legalPawnMoves(piece, pieces), containsInAnyOrder(points));
+        assertThat(validator.legalPawnMoves(piece, pieces).size(), equalTo(points.length));
     }
 
     @Test
@@ -78,6 +81,7 @@ public class MoveValidatorTest {
         final var pieces = new ArrayList<ChessPiece>(Arrays.asList(piecesArr));
         final var points = new Point[]{};
         assertThat(validator.legalPawnMoves(piece, pieces), containsInAnyOrder(points));
+        assertThat(validator.legalPawnMoves(piece, pieces).size(), equalTo(points.length));
     }
 
     @Test
@@ -100,6 +104,7 @@ public class MoveValidatorTest {
                 )
         };
         assertThat(validator.legalPawnMoves(piece, pieces), containsInAnyOrder(points));
+        assertThat(validator.legalPawnMoves(piece, pieces).size(), equalTo(points.length));
     }
 
     @Test
@@ -126,6 +131,7 @@ public class MoveValidatorTest {
                 )
         };
         assertThat(validator.legalPawnMoves(piece, pieces), containsInAnyOrder(points));
+        assertThat(validator.legalPawnMoves(piece, pieces).size(), equalTo(points.length));
     }
 
     @Test
@@ -144,6 +150,7 @@ public class MoveValidatorTest {
                 )
         };
         assertThat(validator.legalPawnMoves(piece, pieces), containsInAnyOrder(points));
+        assertThat(validator.legalPawnMoves(piece, pieces).size(), equalTo(points.length));
     }
 
 // KNIGHT VALIDATION TESTS
@@ -166,6 +173,7 @@ public class MoveValidatorTest {
 
         final var validMoves = validator.legalKnightMoves(knight, emptyBoardPieces);
         assertThat(validMoves, containsInAnyOrder(points));
+        assertThat(validMoves.size(), equalTo(points.length));
     }
 
     @Test
@@ -188,6 +196,7 @@ public class MoveValidatorTest {
         final var points = new Point[]{};
         final var validMoves = validator.legalKnightMoves(knight, pieces);
         assertThat(validMoves, containsInAnyOrder(points));
+        assertThat(validMoves.size(), equalTo(points.length));
     }
 
     // KING VALIDATION TESTS
@@ -212,6 +221,7 @@ public class MoveValidatorTest {
 
         final var validMoves = validator.legalKingMoves(king, boardPieces);
         assertThat(validMoves, containsInAnyOrder(points));
+        assertThat(validMoves.size(), equalTo(points.length));
     }
 
     // ROOK VALIDATION TESTS
@@ -243,6 +253,7 @@ public class MoveValidatorTest {
 
         final var validMoves = validator.legalRookMoves(rook, emptyBoardPieces);
         assertThat(validMoves, containsInAnyOrder(points));
+        assertThat(validMoves.size(), equalTo(points.length));
     }
 
     // BISHOP VALIDATION TESTS
@@ -273,6 +284,7 @@ public class MoveValidatorTest {
 
         final var validMoves = validator.legalBishopMoves(bishop, emptyBoardPieces);
         assertThat(validMoves, containsInAnyOrder(points));
+        assertThat(validMoves.size(), equalTo(points.length));
     }
 
 }
