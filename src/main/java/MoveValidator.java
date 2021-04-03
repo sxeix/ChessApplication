@@ -100,7 +100,7 @@ public class MoveValidator {
         ChessPiece otherKing = pieces.stream()
                 .filter(piece -> piece.getType() == PieceEnum.KING && king.getColour() != piece.getColour())
                 .findFirst()
-                .get();
+                .orElse(null);
         ArrayList<Point> invalidMoves = new ArrayList<>();
         potentialMoves.forEach(potentialMove ->{
                     for (int i = (int)potentialMove.getX() - 1; i < (int)potentialMove.getX() + 2; i++)

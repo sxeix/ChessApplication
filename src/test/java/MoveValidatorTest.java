@@ -190,4 +190,89 @@ public class MoveValidatorTest {
         assertThat(validMoves, containsInAnyOrder(points));
     }
 
+    // KING VALIDATION TESTS
+    @Test
+    public void king_all_moves_test() {
+        final var validator = new MoveValidator();
+        final var boardPieces = new ArrayList<ChessPiece>();
+        final var king = new ChessPiece(PieceEnum.KING, ColourEnum.BLACK, 2, 2, 75);
+        final var secondKing = new ChessPiece(PieceEnum.KING, ColourEnum.WHITE, 6, 6, 75);
+        boardPieces.add(secondKing);
+
+        final var points = new Point[]{
+                new Point(king.getXCoord(), king.getYCoord() - 1),
+                new Point(king.getXCoord(), king.getYCoord() + 1),
+                new Point(king.getXCoord() - 1, king.getYCoord() + 1),
+                new Point(king.getXCoord() - 1, king.getYCoord()),
+                new Point(king.getXCoord() - 1, king.getYCoord() - 1),
+                new Point(king.getXCoord() + 1, king.getYCoord() + 1),
+                new Point(king.getXCoord() + 1, king.getYCoord()),
+                new Point(king.getXCoord() + 1, king.getYCoord() - 1)
+        };
+
+        final var validMoves = validator.legalKingMoves(king, boardPieces);
+        assertThat(validMoves, containsInAnyOrder(points));
+    }
+
+    // ROOK VALIDATION TESTS
+    @Test
+    public void rook_all_moves_test() {
+        final var validator = new MoveValidator();
+        final var emptyBoardPieces = new ArrayList<ChessPiece>();
+        final var rook = new ChessPiece(PieceEnum.ROOK, ColourEnum.BLACK, 4, 4, 75);
+
+        final var points = new Point[]{
+                new Point(rook.getXCoord(), rook.getYCoord() - 4),
+                new Point(rook.getXCoord(), rook.getYCoord() - 3),
+                new Point(rook.getXCoord(), rook.getYCoord() - 2),
+                new Point(rook.getXCoord(), rook.getYCoord() - 1),
+
+                new Point(rook.getXCoord(), rook.getYCoord() + 3),
+                new Point(rook.getXCoord(), rook.getYCoord() + 2),
+                new Point(rook.getXCoord(), rook.getYCoord() + 1),
+
+                new Point(rook.getXCoord() - 4, rook.getYCoord()),
+                new Point(rook.getXCoord() - 3, rook.getYCoord()),
+                new Point(rook.getXCoord() - 2, rook.getYCoord()),
+                new Point(rook.getXCoord() - 1, rook.getYCoord()),
+
+                new Point(rook.getXCoord() + 3, rook.getYCoord()),
+                new Point(rook.getXCoord() + 2, rook.getYCoord()),
+                new Point(rook.getXCoord() + 1, rook.getYCoord()),
+        };
+
+        final var validMoves = validator.legalRookMoves(rook, emptyBoardPieces);
+        assertThat(validMoves, containsInAnyOrder(points));
+    }
+
+    // BISHOP VALIDATION TESTS
+    @Test
+    public void bishop_all_moves_test() {
+        final var validator = new MoveValidator();
+        final var emptyBoardPieces = new ArrayList<ChessPiece>();
+        final var bishop = new ChessPiece(PieceEnum.PAWN, ColourEnum.BLACK, 4, 4, 75);
+
+        final var points = new Point[]{
+                new Point(bishop.getXCoord() - 4, bishop.getYCoord() - 4),
+                new Point(bishop.getXCoord() - 3, bishop.getYCoord() - 3),
+                new Point(bishop.getXCoord() - 2, bishop.getYCoord() - 2),
+                new Point(bishop.getXCoord() - 1, bishop.getYCoord() - 1),
+
+                new Point(bishop.getXCoord() - 3, bishop.getYCoord() + 3),
+                new Point(bishop.getXCoord() - 2, bishop.getYCoord() + 2),
+                new Point(bishop.getXCoord() - 1, bishop.getYCoord() + 1),
+
+                new Point(bishop.getXCoord() + 3, bishop.getYCoord() - 3),
+                new Point(bishop.getXCoord() + 2, bishop.getYCoord() - 2),
+                new Point(bishop.getXCoord() + 1, bishop.getYCoord() - 1),
+
+                new Point(bishop.getXCoord() + 3, bishop.getYCoord() + 3),
+                new Point(bishop.getXCoord() + 2, bishop.getYCoord() + 2),
+                new Point(bishop.getXCoord() + 1, bishop.getYCoord() + 1),
+        };
+
+        final var validMoves = validator.legalBishopMoves(bishop, emptyBoardPieces);
+        assertThat(validMoves, containsInAnyOrder(points));
+    }
+
 }
