@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static enums.ColourEnum.WHITE;
+
 @RequiredArgsConstructor
 public class Chessboard {
 
@@ -46,7 +48,7 @@ public class Chessboard {
 
     private final MoveValidator validator = new MoveValidator();
 
-    private ColourEnum turnColour = ColourEnum.WHITE;
+    private ColourEnum turnColour = WHITE;
 
     public void initBoard() {
         GridPane grid = new GridPane();
@@ -82,7 +84,7 @@ public class Chessboard {
     }
 
     public void setPieces() {
-        final var colours = new ColourEnum[]{ColourEnum.BLACK, ColourEnum.WHITE};
+        final var colours = new ColourEnum[]{ColourEnum.BLACK, WHITE};
         for(ColourEnum colour: colours) {
             addPiece(PieceEnum.KING, colour,4,colour == ColourEnum.BLACK ? 0 : 7);
             addPiece(PieceEnum.QUEEN, colour,3,colour == ColourEnum.BLACK ? 0 : 7);
@@ -138,6 +140,7 @@ public class Chessboard {
 
     public void drawLegalMoves(ChessPiece piece){
         for(Point coords: piece.getPotentialMoves()){
+//        for(Point coords: validator.calculateThreatMoves(pieces, WHITE, 0)){
             Circle high = new Circle(this.pxSquareEdge/6);
             high.setFill(Color.GREY);
             high.relocate(((int)coords.getX()) * this.pxSquareEdge + this.pxSquareEdge/3, ((int)coords.getY()) * this.pxSquareEdge + this.pxSquareEdge/3);
@@ -149,7 +152,7 @@ public class Chessboard {
         for(Point coords: piece.getPotentialMoves()){
             if(isValidDrop(coords, e)){
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
-                turnColour = turnColour.equals(ColourEnum.WHITE) ? ColourEnum.BLACK : ColourEnum.WHITE;
+                turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
                 board.getChildren()
                         .stream()
                         .filter(x -> x instanceof ChessPiece)
