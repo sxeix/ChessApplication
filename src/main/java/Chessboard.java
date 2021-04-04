@@ -10,10 +10,8 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
 import java.awt.*;
 import java.util.ArrayList;
-
 import static enums.ColourEnum.WHITE;
 
 @RequiredArgsConstructor

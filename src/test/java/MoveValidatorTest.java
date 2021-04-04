@@ -9,25 +9,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 
 public class MoveValidatorTest {
-// --- Use these points and uncomment ones that you wish to expect from the validation method ---
-//    final var points = new Point[]{
-//            new Point(
-//                    piece.getXCoord(),
-//                    (piece.getColour() == ColourEnum.WHITE ? piece.getYCoord() - 1 : piece.getYCoord() + 1)
-//            ),
-//            new Point(
-//                    piece.getXCoord(),
-//                    (piece.getColour() == ColourEnum.WHITE ? piece.getYCoord() - 2 : piece.getYCoord() + 2)
-//            ),
-//                new Point(
-//                        (piece.getColour() == ColourEnum.WHITE ? piece.getXCoord() + 1 : piece.getXCoord() - 1),
-//                        (piece.getColour() == ColourEnum.WHITE ? piece.getYCoord() - 1 : piece.getYCoord() + 1)
-//                ),
-//            new Point(
-//                    (piece.getColour() == ColourEnum.WHITE ? piece.getXCoord() - 1 : piece.getXCoord() + 1),
-//                    (piece.getColour() == ColourEnum.WHITE ? piece.getYCoord() - 1 : piece.getYCoord() + 1)
-//            )
-//    };
+
 // PAWN VALIDATION TESTS
     @Test
     public void pawn_front_both_test() {
