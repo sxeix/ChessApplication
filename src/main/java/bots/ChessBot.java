@@ -2,7 +2,9 @@ package bots;
 
 import enums.ColourEnum;
 
-public abstract class ChessBot {
+import java.awt.*;
+
+public abstract class ChessBot{
 
     private ColourEnum colour;
 

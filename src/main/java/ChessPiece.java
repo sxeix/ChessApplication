@@ -89,7 +89,10 @@ public class ChessPiece extends ImageView {
         this.moveNum++;
         setXCoord(x);
         setYCoord(y);
+        GridPane.setRowIndex(this, this.getYCoord());
+        GridPane.setColumnIndex(this, this.getXCoord());
     }
+
     // Just for debugging purposes
     public void prettyPrintCoord() {
         System.out.println("(" + (this.xCoord + 1) + "," + (8 - this.yCoord) + ")");

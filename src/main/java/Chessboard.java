@@ -2,7 +2,10 @@ import bots.ChessBot;
 import bots.RandomBot;
 import enums.ColourEnum;
 import enums.PieceEnum;
+import javafx.event.ActionEvent;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -115,31 +118,50 @@ public class Chessboard {
     private void movementControl() {
         for(ChessPiece piece: pieces) {
             // Smooth Movement
-            piece.setOnMousePressed((MouseEvent event) -> {
-                if(!validateColour(piece)) return;
-                validator.calculateLegalMoves(piece, this.pieces);
-                onClickHighlight(event);
-                board.getChildren().remove(piece);
-                drawLegalMoves(piece);
-                pane.getChildren().add(piece); pane.setVisible(true);
-                highlighted.setVisible(true);
-
-                pane.setOnMouseDragged((MouseEvent e) -> {
-                    highlightMovement(e);
-                    piece.relocate(e.getX() - this.pxSquareEdge/2, e.getY() - this.pxSquareEdge/2);
-                });
-
-                piece.setOnMouseReleased((MouseEvent e) -> {
+            if (piece.getColour() == this.playerColour) {
+                piece.setOnMousePressed((MouseEvent event) -> {
                     if(!validateColour(piece)) return;
-                    pane.getChildren().clear(); pane.setVisible(false);
-                    highlighted.setVisible(false);
-                    dropPiece(piece, e);
-                    board.getChildren().add(piece);
-                    board.setOnMouseDragged(null);
-                    if (turnColour != playerColour) chessBot.makeMove();
+                    validator.calculateLegalMoves(piece, this.pieces);
+                    onClickHighlight(event);
+                    board.getChildren().remove(piece);
+                    drawLegalMoves(piece);
+                    pane.getChildren().add(piece); pane.setVisible(true);
+                    highlighted.setVisible(true);
+
+                    pane.setOnMouseDragged((MouseEvent e) -> {
+                        highlightMovement(e);
+                        piece.relocate(e.getX() - this.pxSquareEdge/2, e.getY() - this.pxSquareEdge/2);
+                    });
+
+                    piece.setOnMouseReleased((MouseEvent e) -> {
+                        if(!validateColour(piece)) return;
+                        pane.getChildren().clear(); pane.setVisible(false);
+                        highlighted.setVisible(false);
+                        dropPiece(piece, e);
+                        board.getChildren().add(piece);
+                        board.setOnMouseDragged(null);
+                        if (turnColour != playerColour) {
+                            movePiece(pieces.get(4), pieces.get(4).getXCoord(),pieces.get(4).getYCoord() + 1);
+                            chessBot.makeMove();
+                        }
+                    });
                 });
-            });
+            }
         }
+    }
+
+
+    /**
+     * This method will take a piece and a new set of coordinates for it to be moved to
+     *
+     * @param piece that is to be relocated
+     * @param x coordinate to be moved to
+     * @param y coordinate to be moved to
+     */
+    public void movePiece(ChessPiece piece, Integer x, Integer y) {
+        this.board.getChildren().remove(piece);
+        piece.moveTo(x, y);
+        this.board.getChildren().add(piece);
     }
 
     public void drawLegalMoves(ChessPiece piece){
