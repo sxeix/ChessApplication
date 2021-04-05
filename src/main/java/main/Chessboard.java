@@ -1,7 +1,6 @@
 package main;
 
 import bots.ChessBot;
-import bots.RandomBot;
 import enums.ColourEnum;
 import enums.PieceEnum;
 import javafx.scene.input.MouseEvent;

@@ -1,3 +1,5 @@
+package main;
+
 import bots.RandomBot;
 import enums.ColourEnum;
 import main.Chessboard;
