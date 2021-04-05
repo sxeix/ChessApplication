@@ -1,3 +1,5 @@
+import bots.ChessBot;
+import bots.RandomBot;
 import enums.ColourEnum;
 import enums.PieceEnum;
 import javafx.scene.input.MouseEvent;
@@ -48,6 +50,8 @@ public class Chessboard {
 
     private ColourEnum turnColour = WHITE;
 
+    private ChessBot chessBot;
+
     public void initBoard() {
         GridPane grid = new GridPane();
         overlay = new StackPane();
@@ -76,6 +80,7 @@ public class Chessboard {
         this.board = grid;
         this.overlay.getChildren().addAll(this.board, pane);
         grid.getChildren().add(highlighted);
+        this.chessBot = new RandomBot(playerColour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
         setPieces();
         initialisePlayerColour();
         movementControl();
@@ -131,6 +136,7 @@ public class Chessboard {
                     dropPiece(piece, e);
                     board.getChildren().add(piece);
                     board.setOnMouseDragged(null);
+                    if (turnColour != playerColour) chessBot.makeMove();
                 });
             });
         }
