@@ -28,7 +28,7 @@ public class StartupScreen {
         whiteSelect.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2; -fx-background-radius: 5, 4, 3;");
         blackSelect.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2; -fx-background-radius: 5, 4, 3;");
 
-        Label title = new Label("main.Chess Application");
+        Label title = new Label("Chess Application");
         title.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 40));
         title.setMinSize(600 ,50); title.setLayoutY(30); title.setAlignment(Pos.CENTER);
 

@@ -15,7 +15,7 @@ public class Chess extends Application {
         scene = new Scene(start.getDisplay(), 600, 600);
         stage.setResizable(false);
         stage.setScene(scene);
-        stage.setTitle("main.Chess");
+        stage.setTitle("Chess");
         stage.show();
     }
 
