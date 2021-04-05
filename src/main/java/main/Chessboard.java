@@ -31,6 +31,9 @@ public class Chessboard {
     @Getter
     private final ColourEnum playerColour;
 
+    @NonNull
+    private ChessBot chessBot;
+
     @Getter
     private Integer pxSquareEdge;
 
@@ -53,8 +56,6 @@ public class Chessboard {
     private final MoveValidator validator = new MoveValidator();
 
     private ColourEnum turnColour = WHITE;
-
-    private ChessBot chessBot;
 
     public void initBoard() {
         GridPane grid = new GridPane();
@@ -84,7 +85,7 @@ public class Chessboard {
         this.board = grid;
         this.overlay.getChildren().addAll(this.board, pane);
         grid.getChildren().add(highlighted);
-        this.chessBot = new RandomBot(playerColour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
+//        this.chessBot = new RandomBot(playerColour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
         setPieces();
         initialisePlayerColour();
         movementControl();
