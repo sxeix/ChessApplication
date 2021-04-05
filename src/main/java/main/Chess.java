@@ -1,3 +1,5 @@
+package main;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,7 +15,7 @@ public class Chess extends Application {
         scene = new Scene(start.getDisplay(), 600, 600);
         stage.setResizable(false);
         stage.setScene(scene);
-        stage.setTitle("Chess");
+        stage.setTitle("main.Chess");
         stage.show();
     }
 

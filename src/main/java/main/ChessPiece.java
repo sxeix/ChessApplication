@@ -1,3 +1,5 @@
+package main;
+
 import enums.ColourEnum;
 import enums.PieceEnum;
 import javafx.scene.Cursor;

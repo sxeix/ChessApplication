@@ -1,11 +1,10 @@
+package main;
+
 import bots.ChessBot;
 import bots.RandomBot;
 import enums.ColourEnum;
 import enums.PieceEnum;
-import javafx.event.ActionEvent;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -17,6 +16,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import static enums.ColourEnum.WHITE;
 
 @RequiredArgsConstructor
@@ -87,6 +88,7 @@ public class Chessboard {
         setPieces();
         initialisePlayerColour();
         movementControl();
+        if(!playerColour.equals(WHITE)) botTurn();
     }
 
     public void setPieces() {
@@ -141,8 +143,9 @@ public class Chessboard {
                         board.getChildren().add(piece);
                         board.setOnMouseDragged(null);
                         if (turnColour != playerColour) {
-                            movePiece(pieces.get(4), pieces.get(4).getXCoord(),pieces.get(4).getYCoord() + 1);
-                            chessBot.makeMove();
+//                            movePiece(pieces.get(4), pieces.get(4).getXCoord(),pieces.get(4).getYCoord() + 1);
+//                            chessBot.makeMove(this.pieces, validator);
+                            botTurn();
                         }
                     });
                 });
@@ -162,6 +165,13 @@ public class Chessboard {
         this.board.getChildren().remove(piece);
         piece.moveTo(x, y);
         this.board.getChildren().add(piece);
+    }
+
+    public void botTurn() {
+        var botMove = chessBot.makeMove(this.pieces, validator);
+        assert(Objects.requireNonNull(botMove).getKey() != null);
+        movePiece(botMove.getKey(), (int) botMove.getValue().getX(), (int) botMove.getValue().getY());
+        turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
     }
 
     public void drawLegalMoves(ChessPiece piece){
