@@ -142,11 +142,7 @@ public class Chessboard {
                         dropPiece(piece, e);
                         board.getChildren().add(piece);
                         board.setOnMouseDragged(null);
-                        if (turnColour != playerColour) {
-//                            movePiece(pieces.get(4), pieces.get(4).getXCoord(),pieces.get(4).getYCoord() + 1);
-//                            chessBot.makeMove(this.pieces, validator);
-                            botTurn();
-                        }
+                        if (turnColour != playerColour) botTurn();
                     });
                 });
             }
@@ -167,10 +163,14 @@ public class Chessboard {
         this.board.getChildren().add(piece);
     }
 
+    /**
+     * This method is called when it is the bot's turn to make a move
+     */
     public void botTurn() {
         var botMove = chessBot.makeMove(this.pieces, validator);
         assert(Objects.requireNonNull(botMove).getKey() != null);
         movePiece(botMove.getKey(), (int) botMove.getValue().getX(), (int) botMove.getValue().getY());
+        takePiece(botMove.getKey());
         turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
     }
 
@@ -189,18 +189,31 @@ public class Chessboard {
             if(isValidDrop(coords, e)){
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
-                board.getChildren()
-                        .stream()
-                        .filter(x -> x instanceof ChessPiece)
-                        .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
-                        .findFirst()
-                        .ifPresent( pieceBelow -> {
-                            board.getChildren().remove(pieceBelow);
-                            pieces.remove(pieceBelow);
-                        });
+                takePiece(piece);
             }
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
+    }
+
+    /**
+     * This method takes in a piece that has been moved to a valid position
+     * and checks that there is no piece below it, if there is a piece below then it is taken
+     *
+     * @param piece dropped on a coordinate
+     */
+    public void takePiece(ChessPiece piece) {
+        board.getChildren()
+                .stream()
+                .filter(x -> x instanceof ChessPiece)
+                .filter(boardPiece ->
+                        (((ChessPiece) boardPiece).getYCoord().equals(piece.getYCoord()))
+                        && (((ChessPiece) boardPiece).getXCoord().equals(piece.getXCoord()))
+                        && !((ChessPiece) boardPiece).getColour().equals(piece.getColour()))
+                .findFirst()
+                .ifPresent(pieceBelow -> {
+                    board.getChildren().remove(pieceBelow);
+                    pieces.remove(pieceBelow);
+                });
     }
 
     public void updatePieces(ChessPiece p, int x, int y ) {
