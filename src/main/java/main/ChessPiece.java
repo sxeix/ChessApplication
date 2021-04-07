@@ -95,6 +95,15 @@ public class ChessPiece extends ImageView {
         GridPane.setColumnIndex(this, this.getXCoord());
     }
 
+    public void disableCursor() {
+        this.setCursor(Cursor.DEFAULT);
+    }
+
+    public void resize(Integer newSize) {
+        this.setFitHeight(newSize);
+        this.setFitWidth(newSize);
+    }
+
     // Just for debugging purposes
     public void prettyPrintCoord() {
         System.out.println("(" + (this.xCoord + 1) + "," + (8 - this.yCoord) + ")");
