@@ -51,7 +51,7 @@ public class PiecesTakenComponent extends GridPane {
     }
 
     /**
-     * Adds a background
+     * Adds a background, purely for developing as of now, this method will need to be updated for practical use
      */
     public void enableBackground() {
         // TODO: Update this method to have a nicer background, this is only temporary
