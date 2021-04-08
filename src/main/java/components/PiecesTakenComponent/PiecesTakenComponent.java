@@ -24,8 +24,13 @@ public class PiecesTakenComponent extends GridPane {
 
     private Integer increment = 1;
 
+    // ArraySize
     @Setter
     private Integer size = 16;
+
+    // Size of each square
+    @Setter
+    private Integer squareSize = 30;
 
     public PiecesTakenComponent(ColourEnum colour, Direction fillFromDirection) {
         this.colour = colour;
@@ -37,7 +42,6 @@ public class PiecesTakenComponent extends GridPane {
         this.fillFrom = null;
         this.init();
     }
-
 
     /**
      * This init function handles settings that need to be catered for before anything else.
@@ -57,8 +61,8 @@ public class PiecesTakenComponent extends GridPane {
         // TODO: Update this method to have a nicer background, this is only temporary
         for (var x = 0; x <= size; x++) {
             Rectangle rec = new Rectangle();
-            rec.setWidth(20);
-            rec.setHeight(20);
+            rec.setWidth(this.squareSize);
+            rec.setHeight(this.squareSize);
             rec.setFill(x % 2 == 0 ? Color.DARKSLATEGRAY: Color.GREEN);
             GridPane.setRowIndex(rec, 0);
             GridPane.setColumnIndex(rec, x);
@@ -66,20 +70,18 @@ public class PiecesTakenComponent extends GridPane {
         }
     }
 
-
     /**
      * Adds a piece at the next index and increments the index to point at the next free space for the next call.
      *
      * @param pc the ChessPiece to be added
      */
     public void addPiece(ChessPiece pc) {
-        pc.resize(20);
+        pc.resize(this.squareSize);
         GridPane.setRowIndex(pc, 0);
         GridPane.setColumnIndex(pc, this.boxIndex);
         pc.disableCursor();
         this.getChildren().add(pc);
         this.boxIndex = this.boxIndex + this.increment;
     }
-
 
 }
