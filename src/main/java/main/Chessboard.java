@@ -1,3 +1,6 @@
+package main;
+
+import bots.ChessBot;
 import enums.ColourEnum;
 import enums.PieceEnum;
 import javafx.scene.input.MouseEvent;
@@ -12,6 +15,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import static enums.ColourEnum.WHITE;
 
 @RequiredArgsConstructor
@@ -24,6 +29,9 @@ public class Chessboard {
     @NonNull
     @Getter
     private final ColourEnum playerColour;
+
+    @NonNull
+    private ChessBot chessBot;
 
     @Getter
     private Integer pxSquareEdge;
@@ -76,9 +84,11 @@ public class Chessboard {
         this.board = grid;
         this.overlay.getChildren().addAll(this.board, pane);
         grid.getChildren().add(highlighted);
+//        this.chessBot = new RandomBot(playerColour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
         setPieces();
         initialisePlayerColour();
         movementControl();
+        if(!playerColour.equals(WHITE)) botTurn();
     }
 
     public void setPieces() {
@@ -110,30 +120,58 @@ public class Chessboard {
     private void movementControl() {
         for(ChessPiece piece: pieces) {
             // Smooth Movement
-            piece.setOnMousePressed((MouseEvent event) -> {
-                if(!validateColour(piece)) return;
-                validator.calculateLegalMoves(piece, this.pieces);
-                onClickHighlight(event);
-                board.getChildren().remove(piece);
-                drawLegalMoves(piece);
-                pane.getChildren().add(piece); pane.setVisible(true);
-                highlighted.setVisible(true);
-
-                pane.setOnMouseDragged((MouseEvent e) -> {
-                    highlightMovement(e);
-                    piece.relocate(e.getX() - this.pxSquareEdge/2, e.getY() - this.pxSquareEdge/2);
-                });
-
-                piece.setOnMouseReleased((MouseEvent e) -> {
+            if (piece.getColour() == this.playerColour) {
+                piece.setOnMousePressed((MouseEvent event) -> {
                     if(!validateColour(piece)) return;
-                    pane.getChildren().clear(); pane.setVisible(false);
-                    highlighted.setVisible(false);
-                    dropPiece(piece, e);
-                    board.getChildren().add(piece);
-                    board.setOnMouseDragged(null);
+                    validator.calculateLegalMoves(piece, this.pieces);
+                    onClickHighlight(event);
+                    board.getChildren().remove(piece);
+                    drawLegalMoves(piece);
+                    pane.getChildren().add(piece); pane.setVisible(true);
+                    highlighted.setVisible(true);
+
+                    pane.setOnMouseDragged((MouseEvent e) -> {
+                        highlightMovement(e);
+                        piece.relocate(e.getX() - this.pxSquareEdge/2, e.getY() - this.pxSquareEdge/2);
+                    });
+
+                    piece.setOnMouseReleased((MouseEvent e) -> {
+                        if(!validateColour(piece)) return;
+                        pane.getChildren().clear(); pane.setVisible(false);
+                        highlighted.setVisible(false);
+                        dropPiece(piece, e);
+                        board.getChildren().add(piece);
+                        board.setOnMouseDragged(null);
+                        if (turnColour != playerColour) botTurn();
+                    });
                 });
-            });
+            }
         }
+    }
+
+
+    /**
+     * This method will take a piece and a new set of coordinates for it to be moved to
+     *
+     * @param piece that is to be relocated
+     * @param x coordinate to be moved to
+     * @param y coordinate to be moved to
+     */
+    public void movePiece(ChessPiece piece, Integer x, Integer y) {
+        this.board.getChildren().remove(piece);
+        piece.moveTo(x, y);
+        this.board.getChildren().add(piece);
+    }
+
+    /**
+     * This method is called when it is the bot's turn to make a move
+     */
+    public void botTurn() {
+        var botMove = chessBot.makeMove(this.pieces, validator);
+        assert(Objects.requireNonNull(botMove).getKey() != null);
+        movePiece(botMove.getKey(), (int) botMove.getValue().getX(), (int) botMove.getValue().getY());
+        takePiece(botMove.getKey());
+        turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
     }
 
     public void drawLegalMoves(ChessPiece piece){
@@ -151,18 +189,31 @@ public class Chessboard {
             if(isValidDrop(coords, e)){
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
-                board.getChildren()
-                        .stream()
-                        .filter(x -> x instanceof ChessPiece)
-                        .filter(x -> ((ChessPiece) x).getXCoord().equals(piece.getXCoord()) && ((ChessPiece) x).getYCoord().equals(piece.getYCoord()))
-                        .findFirst()
-                        .ifPresent( pieceBelow -> {
-                            board.getChildren().remove(pieceBelow);
-                            pieces.remove(pieceBelow);
-                        });
+                takePiece(piece);
             }
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
+    }
+
+    /**
+     * This method takes in a piece that has been moved to a valid position
+     * and checks that there is no piece below it, if there is a piece below then it is taken
+     *
+     * @param piece dropped on a coordinate
+     */
+    public void takePiece(ChessPiece piece) {
+        board.getChildren()
+                .stream()
+                .filter(x -> x instanceof ChessPiece)
+                .filter(boardPiece ->
+                        (((ChessPiece) boardPiece).getYCoord().equals(piece.getYCoord()))
+                        && (((ChessPiece) boardPiece).getXCoord().equals(piece.getXCoord()))
+                        && !((ChessPiece) boardPiece).getColour().equals(piece.getColour()))
+                .findFirst()
+                .ifPresent(pieceBelow -> {
+                    board.getChildren().remove(pieceBelow);
+                    pieces.remove(pieceBelow);
+                });
     }
 
     public void updatePieces(ChessPiece p, int x, int y ) {

@@ -1,5 +1,8 @@
+package main;
+
 import enums.ColourEnum;
 import enums.PieceEnum;
+import main.ChessPiece;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;

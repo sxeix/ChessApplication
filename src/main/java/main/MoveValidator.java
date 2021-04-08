@@ -1,3 +1,5 @@
+package main;
+
 import enums.ColourEnum;
 import enums.PieceEnum;
 import lombok.NoArgsConstructor;
@@ -109,7 +111,7 @@ public class MoveValidator {
                 });
         potentialMoves.removeAll(invalidMoves);
 
-        return potentialMoves;
+        return removeIllegalPositions(potentialMoves);
     }
 
     /**
