@@ -9,8 +9,12 @@ import lombok.Getter;
 import lombok.Setter;
 import main.ChessPiece;
 
+/**
+ * This class has the purpose of displaying the pieces taken. Functionality is simple and just adds
+ * a piece to the display. This class is an extension of GridPane.
+ */
 public class PiecesTakenComponent extends GridPane {
-
+    // TODO: Tidy attributes and make sure all have a meaningful purpose (is this.size necessary?)
     @Getter
     private ColourEnum colour;
 
@@ -34,6 +38,11 @@ public class PiecesTakenComponent extends GridPane {
         this.init();
     }
 
+
+    /**
+     * This init function handles settings that need to be catered for before anything else.
+     * In this case at the moment it only caters for flipping the order of insertion
+     */
     public void init() {
         if (this.fillFrom != null && this.fillFrom.equals(Direction.RIGHT)) {
             this.boxIndex = this.size;
@@ -41,7 +50,11 @@ public class PiecesTakenComponent extends GridPane {
         }
     }
 
+    /**
+     * Adds a background
+     */
     public void enableBackground() {
+        // TODO: Update this method to have a nicer background, this is only temporary
         for (var x = 0; x <= size; x++) {
             Rectangle rec = new Rectangle();
             rec.setWidth(20);
@@ -53,6 +66,12 @@ public class PiecesTakenComponent extends GridPane {
         }
     }
 
+
+    /**
+     * Adds a piece at the next index and increments the index to point at the next free space for the next call.
+     *
+     * @param pc the ChessPiece to be added
+     */
     public void addPiece(ChessPiece pc) {
         pc.resize(20);
         GridPane.setRowIndex(pc, 0);
@@ -60,7 +79,6 @@ public class PiecesTakenComponent extends GridPane {
         pc.disableCursor();
         this.getChildren().add(pc);
         this.boxIndex = this.boxIndex + this.increment;
-//        this.boxIndex++;
     }
 
 
