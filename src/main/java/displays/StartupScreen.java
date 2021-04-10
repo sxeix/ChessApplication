@@ -1,4 +1,4 @@
-package gui;
+package displays;
 
 import bots.ChessBot;
 import bots.RandomBot;

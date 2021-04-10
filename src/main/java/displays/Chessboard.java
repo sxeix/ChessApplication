@@ -1,4 +1,4 @@
-package gui;
+package displays;
 
 import application.MoveValidator;
 import bots.ChessBot;

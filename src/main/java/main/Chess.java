@@ -3,7 +3,7 @@ package main;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import gui.StartupScreen;
+import displays.StartupScreen;
 
 public class Chess extends Application {
 
