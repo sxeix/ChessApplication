@@ -12,7 +12,7 @@ public class Chess extends Application {
     public void start(Stage stage) {
         StartupScreen start = new StartupScreen();
         start.initStartupScreen();
-        scene = new Scene(start.getDisplay(), 600, 600);
+        scene = new Scene(start.getDisplay(), 600, 660);
         stage.setResizable(false);
         stage.setScene(scene);
         stage.setTitle("Chess");
