@@ -27,7 +27,7 @@ public class PiecesTakenComponentTest {
     public void background_enabled() {
         final var pcsTknComponent = new PiecesTakenComponent(ColourEnum.BLACK);
         pcsTknComponent.enableBackground();
-        assertThat(pcsTknComponent.getChildren().size(), equalTo(17));
+        assertThat(pcsTknComponent.getChildren().size(), equalTo(20));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class PiecesTakenComponentTest {
         pcsTknComponent.enableBackground();
         pcsTknComponent.addPiece(new ChessPiece(PieceEnum.KING, ColourEnum.BLACK, 0,0, 80));
         pcsTknComponent.addPiece(new ChessPiece(PieceEnum.QUEEN, ColourEnum.BLACK, 0,0, 80));
-        assertThat(pcsTknComponent.getChildren().size(), equalTo(19));
+        assertThat(pcsTknComponent.getChildren().size(), equalTo(22));
     }
 
 }

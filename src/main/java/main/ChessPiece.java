@@ -96,14 +96,10 @@ public class ChessPiece extends ImageView {
         GridPane.setColumnIndex(this, this.getXCoord());
     }
 
-    public void disableCursor() {
-        this.setCursor(Cursor.DEFAULT);
-    }
-
     public void disableMovement() {
-        this.setOnMousePressed((MouseEvent event) -> { });
-        this.setOnMouseReleased((MouseEvent e) -> { });
-        this.disableCursor();
+        this.setOnMousePressed(null);
+        this.setOnMouseReleased(null);
+        this.setCursor(Cursor.DEFAULT);
     }
 
     public void resize(Integer newSize) {
