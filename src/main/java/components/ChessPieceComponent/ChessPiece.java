@@ -1,4 +1,4 @@
-package main;
+package components.ChessPieceComponent;
 
 import enums.ColourEnum;
 import enums.PieceEnum;

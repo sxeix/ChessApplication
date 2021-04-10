@@ -1,9 +1,8 @@
-package main;
+package application;
 
 import enums.ColourEnum;
 import enums.PieceEnum;
-import main.ChessPiece;
-import main.MoveValidator;
+import components.ChessPieceComponent.ChessPiece;
 import org.junit.Test;
 import java.awt.*;
 import java.util.ArrayList;

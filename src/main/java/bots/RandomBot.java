@@ -2,8 +2,8 @@ package bots;
 
 import enums.ColourEnum;
 import javafx.util.Pair;
-import main.ChessPiece;
-import main.MoveValidator;
+import components.ChessPieceComponent.ChessPiece;
+import application.MoveValidator;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;

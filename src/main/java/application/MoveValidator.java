@@ -1,5 +1,6 @@
-package main;
+package application;
 
+import components.ChessPieceComponent.ChessPiece;
 import enums.ColourEnum;
 import enums.PieceEnum;
 import lombok.NoArgsConstructor;

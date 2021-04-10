@@ -1,4 +1,4 @@
-package main;
+package gui;
 
 import bots.ChessBot;
 import bots.RandomBot;
@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import main.Chess;
 
 import static enums.ColourEnum.WHITE;
 
