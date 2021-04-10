@@ -2,8 +2,8 @@ package bots;
 
 import enums.ColourEnum;
 import enums.PieceEnum;
-import main.ChessPiece;
-import main.MoveValidator;
+import components.ChessPieceComponent.ChessPiece;
+import application.MoveValidator;
 import org.junit.Test;
 import java.awt.*;
 import java.util.ArrayList;

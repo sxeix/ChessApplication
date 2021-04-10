@@ -1,8 +1,7 @@
-package main;
+package displays;
 
 import bots.RandomBot;
 import enums.ColourEnum;
-import main.Chessboard;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;

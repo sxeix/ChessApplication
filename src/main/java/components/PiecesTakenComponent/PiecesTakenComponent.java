@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
-import main.ChessPiece;
+import components.ChessPieceComponent.ChessPiece;
 
 /**
  * This class has the purpose of displaying the pieces taken. Functionality is simple and just adds

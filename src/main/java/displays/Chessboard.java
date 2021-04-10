@@ -1,6 +1,8 @@
-package main;
+package displays;
 
+import application.MoveValidator;
 import bots.ChessBot;
+import components.ChessPieceComponent.ChessPiece;
 import components.PiecesTakenComponent.PiecesTakenComponent;
 import enums.ColourEnum;
 import enums.Direction;
