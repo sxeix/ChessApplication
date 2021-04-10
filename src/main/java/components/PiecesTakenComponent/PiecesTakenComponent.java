@@ -26,9 +26,10 @@ public class PiecesTakenComponent extends GridPane {
 
     // ArraySize
     @Setter
-    private Integer size = 16;
+    private Integer size = 19;
 
     // Size of each square
+    @Getter
     @Setter
     private Integer squareSize = 30;
 
