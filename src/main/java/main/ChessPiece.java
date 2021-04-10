@@ -5,6 +5,7 @@ import enums.PieceEnum;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
@@ -97,6 +98,12 @@ public class ChessPiece extends ImageView {
 
     public void disableCursor() {
         this.setCursor(Cursor.DEFAULT);
+    }
+
+    public void disableMovement() {
+        this.setOnMousePressed((MouseEvent event) -> { });
+        this.setOnMouseReleased((MouseEvent e) -> { });
+        this.disableCursor();
     }
 
     public void resize(Integer newSize) {
