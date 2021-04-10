@@ -77,10 +77,10 @@ public class PiecesTakenComponent extends GridPane {
      * @param pc the ChessPiece to be added
      */
     public void addPiece(ChessPiece pc) {
+        pc.disableMovement();
         pc.resize(this.squareSize);
         GridPane.setRowIndex(pc, 0);
         GridPane.setColumnIndex(pc, this.boxIndex);
-        pc.disableCursor();
         this.getChildren().add(pc);
         this.boxIndex = this.boxIndex + this.increment;
     }
