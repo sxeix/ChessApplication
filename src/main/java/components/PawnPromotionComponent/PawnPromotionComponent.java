@@ -5,7 +5,6 @@ import enums.ColourEnum;
 import enums.PieceEnum;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -25,9 +24,9 @@ public class PawnPromotionComponent extends GridPane {
         this.init();
     }
 
-    public PawnPromotionComponent(ColourEnum c, Integer i) {
+    public PawnPromotionComponent(ColourEnum c, Integer sqrSize) {
         this.colour = c;
-        this.squareSize = i;
+        this.squareSize = sqrSize;
         this.init();
     }
 
@@ -45,7 +44,7 @@ public class PawnPromotionComponent extends GridPane {
     }
 
     private void generatePieces() {
-        this.pieces = new ArrayList<ChessPiece>(Arrays.asList(
+        this.pieces = new ArrayList<>(Arrays.asList(
                 new ChessPiece(PieceEnum.QUEEN, this.colour, 0, 0, this.squareSize),
                 new ChessPiece(PieceEnum.KNIGHT, this.colour, 0, 0, this.squareSize),
                 new ChessPiece(PieceEnum.BISHOP, this.colour, 0, 0, this.squareSize),
