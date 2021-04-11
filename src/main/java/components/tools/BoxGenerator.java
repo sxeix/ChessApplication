@@ -13,6 +13,7 @@ public class BoxGenerator {
     public static Rectangle createBox(int i, Integer squareSize, Color colour) {
         return composeBox(i, squareSize, colour);
     }
+
     public static Rectangle createBox(int i, Integer squareSize, Color colourA, Color colourB) {
         return composeBox(i, squareSize, i % 2 == 0 ? colourA : colourB);
     }
