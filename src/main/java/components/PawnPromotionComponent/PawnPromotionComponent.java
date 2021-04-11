@@ -3,6 +3,7 @@ package components.PawnPromotionComponent;
 import components.ChessPieceComponent.ChessPiece;
 import enums.ColourEnum;
 import enums.PieceEnum;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import java.util.ArrayList;
@@ -19,15 +20,21 @@ public class PawnPromotionComponent extends GridPane {
 
     private ArrayList<ChessPiece> pieces;
 
-    public PawnPromotionComponent(ColourEnum c) {
-        this.colour = c;
-        this.init();
+    private ChessPiece selectedPiece;
+
+    public PawnPromotionComponent() {
+        super.setVisible(false);
     }
 
-    public PawnPromotionComponent(ColourEnum c, Integer sqrSize) {
-        this.colour = c;
+    public PawnPromotionComponent(Integer sqrSize) {
         this.squareSize = sqrSize;
+        super.setVisible(false);
+    }
+
+    public void setVisible(ColourEnum c) {
+        this.colour = c;
         this.init();
+        super.setVisible(true);
     }
 
     private void init() {
@@ -50,6 +57,13 @@ public class PawnPromotionComponent extends GridPane {
                 new ChessPiece(PieceEnum.BISHOP, this.colour, 0, 0, this.squareSize),
                 new ChessPiece(PieceEnum.ROOK, this.colour, 0, 0, this.squareSize)
         ));
+
+        for(var piece: this.pieces) {
+            piece.setOnMouseClicked((MouseEvent e) -> {
+                this.setVisible(false);
+                this.selectedPiece = piece;
+            });
+        }
     }
 
     private void populateComponent() {
@@ -58,6 +72,11 @@ public class PawnPromotionComponent extends GridPane {
             GridPane.setColumnIndex(this.pieces.get(i), i);
             this.getChildren().add(this.pieces.get(i));
         }
+    }
+
+    public ChessPiece getSelectedPiece(int x, int y) {
+        this.selectedPiece.moveTo(x,y);
+        return this.selectedPiece;
     }
 
 }
