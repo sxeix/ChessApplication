@@ -57,6 +57,13 @@ public class ChessPiece extends ImageView {
         }
     }
 
+    public void promotePawn(PieceEnum t) {
+        if (!this.type.equals(PieceEnum.PAWN)) return;
+        this.setType(t);
+        Image pieceImage = getPieceImage();
+        this.setImage(pieceImage);
+    }
+
     public Image getPieceImage() {
         try {
             return new Image("Images/" + getPieceString() + "_" + getColourString() + ".png");
