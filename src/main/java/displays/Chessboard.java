@@ -7,6 +7,7 @@ import components.PiecesTakenComponent.PiecesTakenComponent;
 import enums.ColourEnum;
 import enums.Direction;
 import enums.PieceEnum;
+import javafx.animation.FadeTransition;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -14,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class Chessboard {
 
     @NonNull
     @Getter
-    private  final Integer pxSideLength;
+    private final Integer pxSideLength;
 
     @NonNull
     @Getter
@@ -90,10 +92,8 @@ public class Chessboard {
         highlighted.setFill(Color.GREY);
         grid.getChildren().add(highlighted);
         this.board = grid;
-
         setPieces();
         initialisePlayerColour();
-//        this.chessBot = new RandomBot(playerColour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
         this.overlay.getChildren().addAll(whiteTaken, blackTaken, this.board, pane);
         movementControl();
         if(!playerColour.equals(WHITE)) botTurn();
@@ -157,18 +157,33 @@ public class Chessboard {
         }
     }
 
-
     /**
-     * This method will take a piece and a new set of coordinates for it to be moved to
+     * This method will take a piece and a new set of coordinates for it to be moved to (utilised by the bot right now)
+     * This is for manual board manipulation.
      *
      * @param piece that is to be relocated
      * @param x coordinate to be moved to
      * @param y coordinate to be moved to
      */
     public void movePiece(ChessPiece piece, Integer x, Integer y) {
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(1000), piece);
+        fadeOut.setToValue(0.0);
+        fadeOut.setDuration(new Duration(500));
+        fadeOut.setOnFinished((ActionEvent) -> continueMove(piece,x,y));
+        fadeOut.play();
+    }
+
+    public void continueMove(ChessPiece piece, Integer x, Integer y) {
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(1000), piece);
+        fadeIn.setToValue(1);
+        fadeIn.setDuration(new Duration(500));
         this.board.getChildren().remove(piece);
         piece.moveTo(x, y);
         this.board.getChildren().add(piece);
+        fadeIn.setOnFinished((ActionEvent) -> {
+            takePiece(piece);
+        });
+        fadeIn.play();
     }
 
     /**
@@ -178,13 +193,10 @@ public class Chessboard {
         var botMove = chessBot.makeMove(this.pieces, validator);
         assert(Objects.requireNonNull(botMove).getKey() != null);
         movePiece(botMove.getKey(), (int) botMove.getValue().getX(), (int) botMove.getValue().getY());
-        takePiece(botMove.getKey());
-        turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
     }
 
     public void drawLegalMoves(ChessPiece piece){
         for(Point coords: piece.getPotentialMoves()){
-//        for(Point coords: validator.calculateThreatMoves(pieces, WHITE, 0)){
             Circle high = new Circle(this.pxSquareEdge/6);
             high.setFill(Color.GREY);
             high.relocate(((int)coords.getX()) * this.pxSquareEdge + this.pxSquareEdge/3, ((int)coords.getY()) * this.pxSquareEdge + this.pxSquareEdge/3);
@@ -197,7 +209,6 @@ public class Chessboard {
             if(isValidDrop(coords, e)){
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 takePiece(piece);
-                turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
             }
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
@@ -226,6 +237,7 @@ public class Chessboard {
                         blackTaken.addPiece((ChessPiece) pieceBelow);
                     pieces.remove(pieceBelow);
                 });
+        turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
     }
 
     public void updatePieces(ChessPiece p, int x, int y ) {
