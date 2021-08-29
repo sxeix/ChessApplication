@@ -3,10 +3,12 @@ package displays;
 import application.MoveValidator;
 import bots.ChessBot;
 import components.ChessPieceComponent.ChessPiece;
+import components.PawnPromotionComponent.PawnPromotionComponent;
 import components.PiecesTakenComponent.PiecesTakenComponent;
 import enums.ColourEnum;
 import enums.Direction;
 import enums.PieceEnum;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -17,6 +19,8 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -63,6 +67,10 @@ public class Chessboard {
 
     private PiecesTakenComponent whiteTaken, blackTaken;
 
+    private final PawnPromotionComponent pawnPromo = new PawnPromotionComponent(100);
+
+    private boolean botWait = false;
+
     public void initBoard() {
         GridPane grid = new GridPane();
         overlay = new StackPane();
@@ -90,13 +98,20 @@ public class Chessboard {
         highlighted.setFill(Color.GREY);
         grid.getChildren().add(highlighted);
         this.board = grid;
-
         setPieces();
         initialisePlayerColour();
-//        this.chessBot = new RandomBot(playerColour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
         this.overlay.getChildren().addAll(whiteTaken, blackTaken, this.board, pane);
+        setupPawnPromotionComponent();
         movementControl();
         if(!playerColour.equals(WHITE)) botTurn();
+    }
+
+    /**
+     * Sets up the pawn promotion component onto the board.
+     */
+    public void setupPawnPromotionComponent() {
+        this.pawnPromo.setAlignment(Pos.CENTER);
+        this.overlay.getChildren().add(this.pawnPromo);
     }
 
     public void setPieces() {
@@ -150,7 +165,7 @@ public class Chessboard {
                         dropPiece(piece, e);
                         board.getChildren().add(piece);
                         board.setOnMouseDragged(null);
-                        if (turnColour != playerColour) botTurn();
+                        if (turnColour != playerColour && !this.botWait) botTurn();
                     });
                 });
             }
@@ -184,7 +199,6 @@ public class Chessboard {
 
     public void drawLegalMoves(ChessPiece piece){
         for(Point coords: piece.getPotentialMoves()){
-//        for(Point coords: validator.calculateThreatMoves(pieces, WHITE, 0)){
             Circle high = new Circle(this.pxSquareEdge/6);
             high.setFill(Color.GREY);
             high.relocate(((int)coords.getX()) * this.pxSquareEdge + this.pxSquareEdge/3, ((int)coords.getY()) * this.pxSquareEdge + this.pxSquareEdge/3);
@@ -198,9 +212,23 @@ public class Chessboard {
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 takePiece(piece);
                 turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
+                if (piece.getType().equals(PieceEnum.PAWN) && (coords.getY() == 0 || coords.getY() == 7)) {
+                    pawnPromotion(piece);
+                }
             }
         }
         GridPane.setRowIndex(piece, piece.getYCoord()); GridPane.setColumnIndex(piece, piece.getXCoord());
+    }
+
+
+    /**
+     * This method displays the pawnPromotion button and indicates that the bot is to await making a turn
+     *
+     * @param pawn piece to be promoted
+     */
+    public void pawnPromotion(ChessPiece pawn) {
+        setBotWait(true);
+        this.pawnPromo.setVisible(pawn, this.board, this);
     }
 
     /**
@@ -294,5 +322,12 @@ public class Chessboard {
         return playerColour.equals(ColourEnum.BLACK) ?
                 7 - coords.getX() == (int)e.getSceneX()/pxSquareEdge && 7 - coords.getY() == yCoord/pxSquareEdge :
                 coords.getX() == (int)e.getSceneX()/pxSquareEdge && coords.getY() == yCoord/pxSquareEdge;
+    }
+
+    public void setBotWait(Boolean b) {
+        this.botWait = b;
+        if (!b) {
+            this.botTurn();
+        }
     }
 }

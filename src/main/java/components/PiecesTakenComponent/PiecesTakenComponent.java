@@ -3,11 +3,11 @@ package components.PiecesTakenComponent;
 import enums.ColourEnum;
 import enums.Direction;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.Setter;
 import components.ChessPieceComponent.ChessPiece;
+
+import static components.tools.BoxGenerator.createBox;
 
 /**
  * This class has the purpose of displaying the pieces taken. Functionality is simple and just adds
@@ -61,13 +61,7 @@ public class PiecesTakenComponent extends GridPane {
     public void enableBackground() {
         // TODO: Update this method to have a nicer background, this is only temporary
         for (var x = 0; x <= size; x++) {
-            Rectangle rec = new Rectangle();
-            rec.setWidth(this.squareSize);
-            rec.setHeight(this.squareSize);
-            rec.setFill(x % 2 == 0 ? Color.DARKSLATEGRAY: Color.GREEN);
-            GridPane.setRowIndex(rec, 0);
-            GridPane.setColumnIndex(rec, x);
-            this.getChildren().addAll(rec);
+            this.getChildren().addAll(createBox(x, this.squareSize));
         }
     }
 
