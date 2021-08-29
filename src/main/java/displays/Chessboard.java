@@ -212,7 +212,7 @@ public class Chessboard {
                 updatePieces(piece, (int)coords.getX(), (int)coords.getY());
                 takePiece(piece);
                 turnColour = turnColour.equals(WHITE) ? ColourEnum.BLACK : WHITE;
-                if (piece.getType().equals(PieceEnum.PAWN) && coords.getY() == 0 || coords.getY() == 7) {
+                if (piece.getType().equals(PieceEnum.PAWN) && (coords.getY() == 0 || coords.getY() == 7)) {
                     pawnPromotion(piece);
                 }
             }
