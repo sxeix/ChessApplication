@@ -6,6 +6,9 @@
 .idea/
 *.iml
 *.iws
+
+# Netbeans
+nbactions.xml
  
 # Mac
 .DS_Store
