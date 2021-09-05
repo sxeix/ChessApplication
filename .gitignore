@@ -16,3 +16,4 @@ nbactions.xml
 # Maven
 log/
 target/
+dependency-reduced-pom.xml
