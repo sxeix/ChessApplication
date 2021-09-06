@@ -26,14 +26,17 @@ public class RandomAggressiveBot extends ChessBot {
                 .filter(p -> p.getColour().equals(this.colour))
                 .collect(Collectors.toList());
         ArrayList<Pair<ChessPiece, ArrayList<Point>>> pieceMoveList = new ArrayList<>();
-
-        for (var piece : botPieces) {
-            validator.calculateLegalMoves(piece, pieces);
-            if (piece.getPotentialMoves().size() != 0) {
-                Pair<ChessPiece, ArrayList<Point>> pair = new Pair<>(piece, piece.getPotentialMoves());
-                pieceMoveList.add(pair);
-            }
-        }
+        
+        botPieces.stream()
+                .map(p -> {
+                    validator.calculateLegalMoves(p, pieces); 
+                    return p;
+                })
+                .filter(p -> p.getPotentialMoves().size() != 0)
+                .forEach(p -> {
+                    Pair<ChessPiece, ArrayList<Point>> pair = new Pair<>(p, p.getPotentialMoves());
+                    pieceMoveList.add(pair);
+                });
 
         Collections.shuffle(pieceMoveList);
 
