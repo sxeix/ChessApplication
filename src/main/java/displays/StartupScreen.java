@@ -1,6 +1,7 @@
 package displays;
 
 import bots.ChessBot;
+import bots.RandomAggressiveBot;
 import bots.RandomBot;
 import enums.BotEnum;
 import enums.ColourEnum;
@@ -35,7 +36,8 @@ public class StartupScreen {
         botCombo.getItems().addAll(
                 BotEnum.RANDOM.label,
                 BotEnum.HARD.label,
-                BotEnum.CUSTOM.label
+                BotEnum.CUSTOM.label,
+                BotEnum.RAND_AGGRO.label
         );
 
         botCombo.setValue(BotEnum.RANDOM.label);
@@ -80,6 +82,7 @@ public class StartupScreen {
             case RANDOM -> bot = new RandomBot(colour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
             case HARD -> bot = new RandomBot(colour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
             case CUSTOM -> bot = new RandomBot(colour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
+            case RAND_AGGRO -> bot = new RandomAggressiveBot(colour.equals(WHITE) ? ColourEnum.BLACK : WHITE);
             default -> throw new IllegalStateException("Unexpected value: " + this.botType);
         }
         return bot;
