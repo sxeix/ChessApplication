@@ -32,22 +32,19 @@ public class RandomAggressiveBot extends ChessBot {
         System.out.println("randAggroBot move turn");
         final var rand = new Random();
 
-        final var botPieces = pieces
-                .stream()
-                .filter(p -> p.getColour().equals(this.colour))
-                .collect(Collectors.toList());
         ArrayList<Pair<ChessPiece, ArrayList<Point>>> pieceMoveList = new ArrayList<>();
         
-        botPieces.stream()
-                .map(p -> {
-                    validator.calculateLegalMoves(p, pieces); 
-                    return p;
-                })
-                .filter(p -> p.getPotentialMoves().size() != 0)
-                .forEach(p -> {
-                    Pair<ChessPiece, ArrayList<Point>> pair = new Pair<>(p, p.getPotentialMoves());
-                    pieceMoveList.add(pair);
-                });
+        pieces.stream()
+            .filter(p -> p.getColour().equals(this.colour))
+            .map(p -> {
+                validator.calculateLegalMoves(p, pieces); 
+                return p;
+            })
+            .filter(p -> p.getPotentialMoves().size() != 0)
+            .forEach(p -> {
+                Pair<ChessPiece, ArrayList<Point>> pair = new Pair<>(p, p.getPotentialMoves());
+                pieceMoveList.add(pair);
+            });
         
         if (pieceMoveList.size() == 0) return null;
 
