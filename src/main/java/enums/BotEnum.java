@@ -5,7 +5,8 @@ import java.util.Arrays;
 public enum BotEnum {
     RANDOM("Random Bot"),
     HARD("Hard Bot"),
-    CUSTOM("Custom Bot");
+    CUSTOM("Custom Bot"),
+    RAND_AGGRO("Random/Aggro Bot");
 
     public final String label;
 
