@@ -4,6 +4,7 @@ import application.MoveValidator;
 import bots.ChessBot;
 import components.ChessPieceComponent.ChessPiece;
 import components.PawnPromotionComponent.PawnPromotionComponent;
+import components.PawnPromotionComponent.RenderPawnPromotionComponent;
 import components.PiecesTakenComponent.PiecesTakenComponent;
 import enums.ColourEnum;
 import enums.Direction;
@@ -19,7 +20,6 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class Chessboard {
 
     @NonNull
     @Getter
-    private  final Integer pxSideLength;
+    private final Integer pxSideLength;
 
     @NonNull
     @Getter
@@ -70,6 +70,8 @@ public class Chessboard {
     private final PawnPromotionComponent pawnPromo = new PawnPromotionComponent(100);
 
     private boolean botWait = false;
+
+    private final Chessboard chessboard = this;
 
     public void initBoard() {
         GridPane grid = new GridPane();
@@ -228,7 +230,16 @@ public class Chessboard {
      */
     public void pawnPromotion(ChessPiece pawn) {
         setBotWait(true);
-        this.pawnPromo.setVisible(pawn, this.board, this);
+        this.pawnPromo.setVisible(pawn, new RenderPawnPromotionComponent() {
+            @Override
+            public void render(PawnPromotionComponent pawnPromotionComponent, ChessPiece piece, ChessPiece pawnToUpdate) {
+                pawnPromotionComponent.setVisible(false);
+                board.getChildren().remove(pawnToUpdate);
+                pawnToUpdate.promotePawn(piece.getType());
+                board.getChildren().add(pawnToUpdate);
+                chessboard.setBotWait(false);
+            }
+        });
     }
 
     /**

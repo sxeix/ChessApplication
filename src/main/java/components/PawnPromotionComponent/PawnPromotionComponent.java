@@ -45,17 +45,18 @@ public class PawnPromotionComponent extends GridPane {
      * @param board the GridPane that contains the pieces
      * @param cb the chessboard to be able to trigger the bot again
      */
-    public void setVisible(ChessPiece pawn, GridPane board, Chessboard cb) {
+
+    public void setVisible(ChessPiece pawn, RenderPawnPromotionComponent myInterface) {
         this.colour = pawn.getColour();
         this.pawnToUpdate = pawn;
-        this.init(board, cb);
+        this.init(myInterface);
         super.setVisible(true);
     }
 
-    private void init(GridPane board, Chessboard cb) {
+    private void init(RenderPawnPromotionComponent myInterface) {
         // Set up component
         this.drawComponentFrame();
-        this.generatePieces(board, cb);
+        this.generatePieces(myInterface);
         this.populateComponent();
     }
 
@@ -75,7 +76,7 @@ public class PawnPromotionComponent extends GridPane {
      * @param board the GridPane that the ChesssPiece selected will be added to
      * @param cb the chessboard so that the bot can be enabled again and the game can continue.
      */
-    private void generatePieces(GridPane board, Chessboard cb) {
+    private void generatePieces(RenderPawnPromotionComponent myInterface) {
         this.pieces = new ArrayList<>(Arrays.asList(
                 new ChessPiece(PieceEnum.QUEEN, this.colour, 0, 0, this.squareSize),
                 new ChessPiece(PieceEnum.KNIGHT, this.colour, 0, 0, this.squareSize),
@@ -85,11 +86,7 @@ public class PawnPromotionComponent extends GridPane {
 
         for(var piece: this.pieces) {
             piece.setOnMouseClicked((MouseEvent e) -> {
-                this.setVisible(false);
-                board.getChildren().remove(this.pawnToUpdate);
-                this.pawnToUpdate.promotePawn(piece.getType());
-                board.getChildren().add(this.pawnToUpdate);
-                cb.setBotWait(false);
+                myInterface.render(this, piece, this.pawnToUpdate);
             });
         }
     }
