@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="EntryMain" type="Application" factoryName="Application" nameIsGenerated="true">
+  <configuration default="false" name="RUN" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="main.EntryMain" />
     <module name="ChessApplication" />
     <option name="WORKING_DIRECTORY" value="$MODULE_WORKING_DIR$" />

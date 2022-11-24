@@ -52,10 +52,24 @@ public class PawnPromotionComponent extends GridPane {
         super.setVisible(true);
     }
 
+    public void setVisible(ChessPiece pawn, RenderPawnPromotionComponent myInterface) {
+        this.colour = pawn.getColour();
+        this.pawnToUpdate = pawn;
+        this.init(myInterface);
+        super.setVisible(true);
+    }
+
     private void init(GridPane board, Chessboard cb) {
         // Set up component
         this.drawComponentFrame();
         this.generatePieces(board, cb);
+        this.populateComponent();
+    }
+
+    private void init(RenderPawnPromotionComponent myInterface) {
+        // Set up component
+        this.drawComponentFrame();
+        this.generatePieces(myInterface);
         this.populateComponent();
     }
 
@@ -90,6 +104,20 @@ public class PawnPromotionComponent extends GridPane {
                 this.pawnToUpdate.promotePawn(piece.getType());
                 board.getChildren().add(this.pawnToUpdate);
                 cb.setBotWait(false);
+            });
+        }
+    }
+    private void generatePieces(RenderPawnPromotionComponent myInterface) {
+        this.pieces = new ArrayList<>(Arrays.asList(
+                new ChessPiece(PieceEnum.QUEEN, this.colour, 0, 0, this.squareSize),
+                new ChessPiece(PieceEnum.KNIGHT, this.colour, 0, 0, this.squareSize),
+                new ChessPiece(PieceEnum.BISHOP, this.colour, 0, 0, this.squareSize),
+                new ChessPiece(PieceEnum.ROOK, this.colour, 0, 0, this.squareSize)
+        ));
+
+        for(var piece: this.pieces) {
+            piece.setOnMouseClicked((MouseEvent e) -> {
+                myInterface.render(this, piece, this.pawnToUpdate);
             });
         }
     }

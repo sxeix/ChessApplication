@@ -5,7 +5,6 @@ import enums.PieceEnum;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import lombok.Getter;
 import lombok.Setter;
