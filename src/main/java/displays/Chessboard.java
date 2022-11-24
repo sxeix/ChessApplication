@@ -20,7 +20,6 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -231,7 +230,6 @@ public class Chessboard {
      */
     public void pawnPromotion(ChessPiece pawn) {
         setBotWait(true);
-//        this.pawnPromo.setVisible(pawn, this.board, this);
         this.pawnPromo.setVisible(pawn, new RenderPawnPromotionComponent() {
             @Override
             public void render(PawnPromotionComponent pawnPromotionComponent, ChessPiece piece, ChessPiece pawnToUpdate) {

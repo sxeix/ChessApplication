@@ -45,25 +45,12 @@ public class PawnPromotionComponent extends GridPane {
      * @param board the GridPane that contains the pieces
      * @param cb the chessboard to be able to trigger the bot again
      */
-    public void setVisible(ChessPiece pawn, GridPane board, Chessboard cb) {
-        this.colour = pawn.getColour();
-        this.pawnToUpdate = pawn;
-        this.init(board, cb);
-        super.setVisible(true);
-    }
 
     public void setVisible(ChessPiece pawn, RenderPawnPromotionComponent myInterface) {
         this.colour = pawn.getColour();
         this.pawnToUpdate = pawn;
         this.init(myInterface);
         super.setVisible(true);
-    }
-
-    private void init(GridPane board, Chessboard cb) {
-        // Set up component
-        this.drawComponentFrame();
-        this.generatePieces(board, cb);
-        this.populateComponent();
     }
 
     private void init(RenderPawnPromotionComponent myInterface) {
@@ -89,24 +76,6 @@ public class PawnPromotionComponent extends GridPane {
      * @param board the GridPane that the ChesssPiece selected will be added to
      * @param cb the chessboard so that the bot can be enabled again and the game can continue.
      */
-    private void generatePieces(GridPane board, Chessboard cb) {
-        this.pieces = new ArrayList<>(Arrays.asList(
-                new ChessPiece(PieceEnum.QUEEN, this.colour, 0, 0, this.squareSize),
-                new ChessPiece(PieceEnum.KNIGHT, this.colour, 0, 0, this.squareSize),
-                new ChessPiece(PieceEnum.BISHOP, this.colour, 0, 0, this.squareSize),
-                new ChessPiece(PieceEnum.ROOK, this.colour, 0, 0, this.squareSize)
-        ));
-
-        for(var piece: this.pieces) {
-            piece.setOnMouseClicked((MouseEvent e) -> {
-                this.setVisible(false);
-                board.getChildren().remove(this.pawnToUpdate);
-                this.pawnToUpdate.promotePawn(piece.getType());
-                board.getChildren().add(this.pawnToUpdate);
-                cb.setBotWait(false);
-            });
-        }
-    }
     private void generatePieces(RenderPawnPromotionComponent myInterface) {
         this.pieces = new ArrayList<>(Arrays.asList(
                 new ChessPiece(PieceEnum.QUEEN, this.colour, 0, 0, this.squareSize),
