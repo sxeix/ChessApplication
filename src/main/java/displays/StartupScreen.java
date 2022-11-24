@@ -32,7 +32,7 @@ public class StartupScreen {
         Button blackSelect = new Button();
         Button whiteSelect = new Button();
 
-        ComboBox<String> botCombo = new ComboBox<String>();
+        ComboBox<String> botCombo = new ComboBox<>();
         botCombo.getItems().addAll(
                 BotEnum.RANDOM.label,
                 BotEnum.HARD.label,
@@ -57,15 +57,16 @@ public class StartupScreen {
         blackSelect.setStyle("-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color; -fx-background-insets: 0, 1, 2; -fx-background-radius: 5, 4, 3;");
 
         Label title = new Label("Chess Application");
-        title.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 40));
+        String fontFamily = "verdana";
+        title.setFont(Font.font(fontFamily, FontWeight.BOLD, FontPosture.REGULAR, 40));
         title.setMinSize(600 ,50); title.setLayoutY(30); title.setAlignment(Pos.CENTER);
 
         Label credit = new Label("by James and Royston");
-        credit.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        credit.setFont(Font.font(fontFamily, FontWeight.BOLD, FontPosture.REGULAR, 20));
         credit.setMinSize(600 ,50); credit.setLayoutY(70); credit.setAlignment(Pos.CENTER);
 
         Label colorPick = new Label("Please Select Black or White");
-        colorPick.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        colorPick.setFont(Font.font(fontFamily, FontWeight.BOLD, FontPosture.REGULAR, 20));
         colorPick.setMinSize(600 ,50); colorPick.setLayoutY(150); colorPick.setAlignment(Pos.CENTER);
 
         display.getChildren().addAll(whiteSelect, blackSelect, title, credit, colorPick, botCombo);

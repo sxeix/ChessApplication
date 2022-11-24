@@ -6,6 +6,7 @@ import components.ChessPieceComponent.ChessPiece;
 import application.MoveValidator;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This is an abstract class of a bot.
@@ -20,7 +21,9 @@ public abstract class ChessBot{
 
     protected ColourEnum colour;
 
-    public ChessBot(ColourEnum c) {
+    protected final Random random = new Random();
+
+    protected ChessBot(ColourEnum c) {
         this.colour = c;
     }
 

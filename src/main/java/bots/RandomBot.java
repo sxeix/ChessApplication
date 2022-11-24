@@ -31,7 +31,6 @@ public class RandomBot extends ChessBot {
     @Override
     public Pair<ChessPiece, Point> makeMove(ArrayList<ChessPiece> pieces, MoveValidator validator) {
         System.out.println("random move turn");
-        final var rand = new Random();
         final var botPieces = pieces
                 .stream()
                 .filter(p -> p.getColour().equals(this.colour))
@@ -40,8 +39,8 @@ public class RandomBot extends ChessBot {
         for(var piece: botPieces) {
             validator.calculateLegalMoves(piece, pieces);
             var potentialMoves = piece.getPotentialMoves();
-            if (potentialMoves.size() != 0) {
-                return new Pair<>(piece, potentialMoves.get(rand.nextInt(potentialMoves.size())));
+            if (!potentialMoves.isEmpty()) {
+                return new Pair<>(piece, potentialMoves.get(random.nextInt(potentialMoves.size())));
             }
         }
         return null;

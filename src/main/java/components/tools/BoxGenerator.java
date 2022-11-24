@@ -6,6 +6,8 @@ import javafx.scene.shape.Rectangle;
 
 public class BoxGenerator {
 
+    private BoxGenerator() {}
+
     public static Rectangle createBox(int i, Integer squareSize) {
         return composeBox(i, squareSize, i % 2 == 0 ? Color.DARKSLATEGRAY: Color.GREEN);
     }
