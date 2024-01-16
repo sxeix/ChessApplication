@@ -6,8 +6,6 @@ import enums.ColourEnum;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
-import java.util.stream.Collectors;
 import javafx.util.Pair;
 
 /**
@@ -30,7 +28,6 @@ public class RandomAggressiveBot extends ChessBot {
     @Override
     public Pair<ChessPiece, Point> makeMove(ArrayList<ChessPiece> pieces, MoveValidator validator) {
         System.out.println("randAggroBot move turn");
-        final var rand = new Random();
 
         ArrayList<Pair<ChessPiece, ArrayList<Point>>> pieceMoveList = new ArrayList<>();
         
@@ -40,13 +37,13 @@ public class RandomAggressiveBot extends ChessBot {
                 validator.calculateLegalMoves(p, pieces); 
                 return p;
             })
-            .filter(p -> p.getPotentialMoves().size() != 0)
+            .filter(p -> !p.getPotentialMoves().isEmpty())
             .forEach(p -> {
                 Pair<ChessPiece, ArrayList<Point>> pair = new Pair<>(p, p.getPotentialMoves());
                 pieceMoveList.add(pair);
             });
         
-        if (pieceMoveList.size() == 0) return null;
+        if (pieceMoveList.isEmpty()) return null;
 
         Collections.shuffle(pieceMoveList);
 
@@ -55,15 +52,15 @@ public class RandomAggressiveBot extends ChessBot {
             var moves = pair.getValue();
             for (var move : moves) {
                 if (moveTakesPiece(move, pieces)) {
-                    return new Pair(piece, move);
+                    return new Pair<>(piece, move);
                 }
             }
         }
 
-        var fallbackPiece = pieceMoveList.get(rand.nextInt(pieceMoveList.size()));
+        var fallbackPiece = pieceMoveList.get(random.nextInt(pieceMoveList.size()));
         return new Pair<>(
                 fallbackPiece.getKey(),
-                fallbackPiece.getValue().get(rand.nextInt(fallbackPiece.getValue().size()))
+                fallbackPiece.getValue().get(random.nextInt(fallbackPiece.getValue().size()))
         );
 
     }

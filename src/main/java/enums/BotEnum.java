@@ -10,7 +10,7 @@ public enum BotEnum {
 
     public final String label;
 
-    private BotEnum(String label) {
+    BotEnum(String label) {
         this.label = label;
     }
 

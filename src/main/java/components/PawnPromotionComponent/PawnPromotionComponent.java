@@ -1,7 +1,6 @@
 package components.PawnPromotionComponent;
 
 import components.ChessPieceComponent.ChessPiece;
-import displays.Chessboard;
 import enums.ColourEnum;
 import enums.PieceEnum;
 import javafx.scene.input.MouseEvent;
@@ -85,9 +84,9 @@ public class PawnPromotionComponent extends GridPane {
         ));
 
         for(var piece: this.pieces) {
-            piece.setOnMouseClicked((MouseEvent e) -> {
-                myInterface.render(this, piece, this.pawnToUpdate);
-            });
+            piece.setOnMouseClicked((MouseEvent e) ->
+                myInterface.render(this, piece, this.pawnToUpdate)
+            );
         }
     }
 

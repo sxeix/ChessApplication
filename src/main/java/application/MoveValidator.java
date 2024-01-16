@@ -34,16 +34,19 @@ public class MoveValidator {
                 .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()))
                 .forEach(invalidMove -> {
                     if (invalidMove.getColour() == rook.getColour()) moves.remove(invalidMove.getCurrentPos());
-                    if (invalidMove.getXCoord().equals(x))
-                        if (invalidMove.getYCoord() > y)
+                    if (invalidMove.getXCoord().equals(x)) {
+                        if (invalidMove.getYCoord() > y) {
                             for (int i = invalidMove.getYCoord() + 1; i < 8; i++) moves.remove(new Point(x, i));
-                        else
+                        } else {
                             for (int i = invalidMove.getYCoord() - 1; i >= 0; i--) moves.remove(new Point(x, i));
-                    else
-                        if (invalidMove.getXCoord() > x)
+                        }
+                    } else {
+                        if (invalidMove.getXCoord() > x) {
                             for (int i = invalidMove.getXCoord() + 1; i < 8; i++) moves.remove(new Point(i, y));
-                        else
+                        } else {
                             for (int i = invalidMove.getXCoord() - 1; i >= 0; i--) moves.remove(new Point(i, y));
+                        }
+                    }
                 });
         return removeIllegalPositions(moves);
     }
@@ -59,16 +62,23 @@ public class MoveValidator {
                 .filter(potentialMove -> moves.contains(potentialMove.getCurrentPos()))
                 .forEach(invalidMove -> {
                     if (invalidMove.getColour() == bishop.getColour()) moves.remove(invalidMove.getCurrentPos());
-                    if (invalidMove.getXCoord() > x)
-                        if (invalidMove.getYCoord() > y)
-                            for (int i = invalidMove.getYCoord() + 1, j = invalidMove.getXCoord() + 1; i<8 && j<8; i++, j++) moves.remove(new Point(j, i));
-                        else
-                            for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() + 1; i>=0 && j<8; i--, j++) moves.remove(new Point(j, i));
-                    else
-                        if (invalidMove.getYCoord() > y)
-                            for (int i = invalidMove.getYCoord() + 1, j = invalidMove.getXCoord() - 1; i<8 && j>=0; i++, j--) moves.remove(new Point(j, i));
-                        else
-                            for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() - 1; i>=0 && j>=0; i--, j--) moves.remove(new Point(j, i));
+                    if (invalidMove.getXCoord() > x) {
+                        if (invalidMove.getYCoord() > y) {
+                            for (int i = invalidMove.getYCoord() + 1, j = invalidMove.getXCoord() + 1; i < 8 && j < 8; i++, j++)
+                                moves.remove(new Point(j, i));
+                        } else {
+                            for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() + 1; i >= 0 && j < 8; i--, j++)
+                                moves.remove(new Point(j, i));
+                        }
+                    } else {
+                        if (invalidMove.getYCoord() > y) {
+                            for (int i = invalidMove.getYCoord() + 1, j = invalidMove.getXCoord() - 1; i < 8 && j >= 0; i++, j--)
+                                moves.remove(new Point(j, i));
+                        } else {
+                            for (int i = invalidMove.getYCoord() - 1, j = invalidMove.getXCoord() - 1; i >= 0 && j >= 0; i--, j--)
+                                moves.remove(new Point(j, i));
+                        }
+                    }
                 });
         return removeIllegalPositions(moves);
     }
@@ -242,6 +252,7 @@ public class MoveValidator {
                         case PAWN -> threatMoves.addAll(allPawnCaptureMoves(piece));
                         case KNIGHT -> threatMoves.addAll(legalKnightMoves(piece, pieces));
                         case QUEEN -> threatMoves.addAll(legalQueenMoves(piece, pieces));
+                        default -> System.out.println("Invalid piece type");
                     }
                 });
         return new ArrayList<>(threatMoves);
